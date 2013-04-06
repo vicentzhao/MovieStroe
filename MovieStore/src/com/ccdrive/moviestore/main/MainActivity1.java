@@ -1141,7 +1141,7 @@ public class MainActivity1 extends FragmentActivity implements
 				"缓冲中。。", "正在缓冲请稍后。。");
 		ProDiaglogDimiss(Dialog);
 		final String musicId = list.get(j).getId();
-		String web_url = HttpRequest.URL_QUERY_LIST_MUSIC + musicId;
+		String web_url = HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
 		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {// 这里的函数是一个内嵌函数如果是函数体比较复杂的话这种方法就不太合适了
 					@Override
 					public void callback(String url, String json,
@@ -1191,15 +1191,7 @@ public class MainActivity1 extends FragmentActivity implements
 														@Override
 														public void onClick(
 																View v) {
-															if (bo == ismusic) {
-
-																setMusicPilot(
-																		appDownPathtrue,
-																		view,
-																		viewid);
-															} else {
 																setMVPilot(music);
-															}
 														}
 													});
 								}
@@ -1217,7 +1209,7 @@ public class MainActivity1 extends FragmentActivity implements
 						}
 					}
 				});
-		String musicssPath = HttpRequest.URL_QUERY_SINGLE_MUSIC + musicId;
+		String musicssPath = HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
 		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {
@@ -1446,129 +1438,129 @@ public class MainActivity1 extends FragmentActivity implements
 	}
 
 	// set pilot play UI
-	public static void setMusicPilot(final String path, View v1, int viewid) {
-
-		v1.setOnKeyListener(new OnKeyListener() {
-
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					if (audioStreamer != null) {
-						if (audioStreamer.getMediaPlayer() != null) {
-							audioStreamer.getMediaPlayer().stop();
-						}
-					}
-				}
-				return false;
-			}
-		});
-		try {
-			if (whatisplay == 1) {
-				whatisplay = viewid;
-				final SeekBar progressBar = (SeekBar) (v1.findViewById(viewid)
-						.findViewById(R.id.progress_bar));
-				progressBar.setVisibility(View.VISIBLE);
-				final TextView playTime = (TextView) (v1.findViewById(viewid)
-						.findViewById(R.id.playTime));
-				audioStreamer = new StreamingMediaPlayer(aQuery.getContext(),
-						progressBar, playTime);
-				audioStreamer.startStreaming(path);
-			} else if (whatisplay == viewid) {
-				whatisplay = viewid;
-				if (audioStreamer.getMediaPlayer().isPlaying()) {
-					audioStreamer.getMediaPlayer().pause();
-				} else if (!audioStreamer.getMediaPlayer().isPlaying()) {
-					audioStreamer.getMediaPlayer().start();
-					audioStreamer.startPlayProgressUpdater();
-				}
-			} else if (whatisplay != viewid) {
-				final SeekBar progressBarold = (SeekBar) (v1
-						.findViewById(whatisplay)
-						.findViewById(R.id.progress_bar));
-				progressBarold.setVisibility(View.INVISIBLE);
-				whatisplay = viewid;
-				if (audioStreamer.getMediaPlayer().isPlaying()) {
-					audioStreamer.getMediaPlayer().stop();
-				}
-				final SeekBar progressBar = (SeekBar) (v1.findViewById(viewid)
-						.findViewById(R.id.progress_bar));
-				progressBar.setVisibility(View.VISIBLE);
-				final TextView playTime = (TextView) (v1.findViewById(viewid)
-						.findViewById(R.id.playTime));
-				audioStreamer = new StreamingMediaPlayer(aQuery.getContext(),
-						progressBar, playTime);
-				audioStreamer.startStreaming(path);
-			}
-
-		} catch (Exception e) {
-		}
-		// //
-		// final Dialog dl = new Dialog(aQuery.getContext());
-		// final View view = inflater.inflate(R.layout.musicplay, null);
-		// dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// dl.setContentView(view);
-		// Window dialogWindow = dl.getWindow();
-		// WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-		// dialogWindow.setGravity(Gravity.CENTER);
-		// lp.width = 400;
-		// lp.height =300;
-		// dialogWindow.setAttributes(lp);
-		// dl.show();
-		// final ImageButton iv = (ImageButton)
-		// view.findViewById(R.id.btn_play);
-		// ((TextView)view.findViewById(R.id.btn_playname)).setText(name);
-		// mp = new MediaPlayer();
-		// view.findViewById(R.id.btn_stop).setOnClickListener(new
-		// OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// mp.stop();
-		// dl.dismiss();
-		// }
-		// });
-		// view.findViewById(R.id.btn_play).setOnClickListener(new
-		// OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// if(isplay){
-		// mp.pause();
-		// iv.setImageResource(R.drawable.desktop_playbt_b);
-		// isplay=false;
-		// }
-		// else if(!isplay){
-		// mp.start();
-		// iv.setImageResource(R.drawable.desktop_pausebt_b);
-		// isplay =true;
-		// }
-		// }
-		// });
-		// dl.setOnKeyListener(new OnKeyListener() {
-		// @Override
-		// public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent
-		// event) {
-		// // TODO Auto-generated method stub
-		// if(keyCode==KeyEvent.KEYCODE_BACK){
-		// if(isplay){
-		// if(mp!=null){
-		// mp.stop();
-		// }
-		// }
-		// return false;
-		// }
-		// return false;
-		// }
-		// });
-		//
-		// if (musicTryTask != null && musicTryTask.getStatus() ==
-		// AsyncTask.Status.RUNNING) {
-		// musicTryTask.cancel(true); // 如果Task还在运行，则先取消它
-		// }else{
-		// musicTryTask = new musicTryplayAsyncTask(iv);
-		// }
-		// musicTryTask.execute(path);
-
-	}
+//	public static void setMusicPilot(final String path, View v1, int viewid) {
+//
+//		v1.setOnKeyListener(new OnKeyListener() {
+//
+//			@Override
+//			public boolean onKey(View v, int keyCode, KeyEvent event) {
+//				if (keyCode == KeyEvent.KEYCODE_BACK) {
+//					if (audioStreamer != null) {
+//						if (audioStreamer.getMediaPlayer() != null) {
+//							audioStreamer.getMediaPlayer().stop();
+//						}
+//					}
+//				}
+//				return false;
+//			}
+//		});
+//		try {
+//			if (whatisplay == 1) {
+//				whatisplay = viewid;
+//				final SeekBar progressBar = (SeekBar) (v1.findViewById(viewid)
+//						.findViewById(R.id.progress_bar));
+//				progressBar.setVisibility(View.VISIBLE);
+//				final TextView playTime = (TextView) (v1.findViewById(viewid)
+//						.findViewById(R.id.playTime));
+//				audioStreamer = new StreamingMediaPlayer(aQuery.getContext(),
+//						progressBar, playTime);
+//				audioStreamer.startStreaming(path);
+//			} else if (whatisplay == viewid) {
+//				whatisplay = viewid;
+//				if (audioStreamer.getMediaPlayer().isPlaying()) {
+//					audioStreamer.getMediaPlayer().pause();
+//				} else if (!audioStreamer.getMediaPlayer().isPlaying()) {
+//					audioStreamer.getMediaPlayer().start();
+//					audioStreamer.startPlayProgressUpdater();
+//				}
+//			} else if (whatisplay != viewid) {
+//				final SeekBar progressBarold = (SeekBar) (v1
+//						.findViewById(whatisplay)
+//						.findViewById(R.id.progress_bar));
+//				progressBarold.setVisibility(View.INVISIBLE);
+//				whatisplay = viewid;
+//				if (audioStreamer.getMediaPlayer().isPlaying()) {
+//					audioStreamer.getMediaPlayer().stop();
+//				}
+//				final SeekBar progressBar = (SeekBar) (v1.findViewById(viewid)
+//						.findViewById(R.id.progress_bar));
+//				progressBar.setVisibility(View.VISIBLE);
+//				final TextView playTime = (TextView) (v1.findViewById(viewid)
+//						.findViewById(R.id.playTime));
+//				audioStreamer = new StreamingMediaPlayer(aQuery.getContext(),
+//						progressBar, playTime);
+//				audioStreamer.startStreaming(path);
+//			}
+//
+//		} catch (Exception e) {
+//		}
+//		// //
+//		// final Dialog dl = new Dialog(aQuery.getContext());
+//		// final View view = inflater.inflate(R.layout.musicplay, null);
+//		// dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		// dl.setContentView(view);
+//		// Window dialogWindow = dl.getWindow();
+//		// WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+//		// dialogWindow.setGravity(Gravity.CENTER);
+//		// lp.width = 400;
+//		// lp.height =300;
+//		// dialogWindow.setAttributes(lp);
+//		// dl.show();
+//		// final ImageButton iv = (ImageButton)
+//		// view.findViewById(R.id.btn_play);
+//		// ((TextView)view.findViewById(R.id.btn_playname)).setText(name);
+//		// mp = new MediaPlayer();
+//		// view.findViewById(R.id.btn_stop).setOnClickListener(new
+//		// OnClickListener() {
+//		// @Override
+//		// public void onClick(View v) {
+//		// // TODO Auto-generated method stub
+//		// mp.stop();
+//		// dl.dismiss();
+//		// }
+//		// });
+//		// view.findViewById(R.id.btn_play).setOnClickListener(new
+//		// OnClickListener() {
+//		// @Override
+//		// public void onClick(View v) {
+//		// if(isplay){
+//		// mp.pause();
+//		// iv.setImageResource(R.drawable.desktop_playbt_b);
+//		// isplay=false;
+//		// }
+//		// else if(!isplay){
+//		// mp.start();
+//		// iv.setImageResource(R.drawable.desktop_pausebt_b);
+//		// isplay =true;
+//		// }
+//		// }
+//		// });
+//		// dl.setOnKeyListener(new OnKeyListener() {
+//		// @Override
+//		// public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent
+//		// event) {
+//		// // TODO Auto-generated method stub
+//		// if(keyCode==KeyEvent.KEYCODE_BACK){
+//		// if(isplay){
+//		// if(mp!=null){
+//		// mp.stop();
+//		// }
+//		// }
+//		// return false;
+//		// }
+//		// return false;
+//		// }
+//		// });
+//		//
+//		// if (musicTryTask != null && musicTryTask.getStatus() ==
+//		// AsyncTask.Status.RUNNING) {
+//		// musicTryTask.cancel(true); // 如果Task还在运行，则先取消它
+//		// }else{
+//		// musicTryTask = new musicTryplayAsyncTask(iv);
+//		// }
+//		// musicTryTask.execute(path);
+//
+//	}
 
 	// setmvplay
 	public static void setMVPilot(final Music music) {
@@ -1839,7 +1831,7 @@ public class MainActivity1 extends FragmentActivity implements
 				"Loading。。", "please wait moment。。");
 		Dialog.show();
 		ProDiaglogDimiss(Dialog);
-		String web_url = HttpRequest.URL_QUERY_LIST_MUSIC + musicId;
+		String web_url = HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
 		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {
@@ -1880,12 +1872,13 @@ public class MainActivity1 extends FragmentActivity implements
 
 										@Override
 										public void onClick(View v) {
-											if (isWhatLeft == Constant.MUSICCHAPTER) {
-												setMusicPilot(appDownPathtrue,
-														view, viewid);
-											} else if (isWhatLeft == Constant.MUSICMV) {
-												setMVPilot(music);
-											}
+//											if (isWhatLeft == Constant.MUSICCHAPTER) {
+//												setMusicPilot(appDownPathtrue,
+//														view, viewid);
+//											} else if (isWhatLeft == Constant.MUSICMV) {
+//												setMVPilot(music);
+//											}
+											setMVPilot(music);
 										}
 									});
 						}
@@ -1902,7 +1895,7 @@ public class MainActivity1 extends FragmentActivity implements
 				}
 			}
 		});
-		String musicssPath = HttpRequest.URL_QUERY_SINGLE_MUSIC + musicId;
+		String musicssPath = HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
 		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {

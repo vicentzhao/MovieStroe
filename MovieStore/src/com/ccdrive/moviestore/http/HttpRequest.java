@@ -49,7 +49,6 @@ public class HttpRequest {
 	
 	static HttpClient mHttpClient = null;
 	public static String URL_LOGIN = WEB_ROOT + "login.action?username=";
-	public static String URL ="http://www.baidu.com/images/1.gif";
 	public static String URL_QUERY_ALL_RECORD = WEB_ROOT + "index/tapeshop.action?token=myadmin&resultType=json";
 	public static String URL_QUERY_SINGLE_RECORD = WEB_ROOT + "index/tapeshop!content.action?token=myadmin&resultType=json&&id=";
 	public static String URL_QUERY_SINGLE_IMAGE = WEB_ROOT + "download.action?token=myadmin&inputPath=";

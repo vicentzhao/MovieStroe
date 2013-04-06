@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <TextView
+                android:id="@+id/btn_playname"
+                android:textSize="20dp"
+                android:text="hello"
+                android:textColor="@color/red"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+        />
+<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/playcontrol_bg"
+            android:gravity="center_vertical" 
+            >
+            <ImageButton
+                android:layout_weight="1"
+                android:id="@+id/btn_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/desktop_playbt_b" />
+            <ImageButton
+                android:id="@+id/btn_previous"
+                 android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:layout_toLeftOf="@+id/btn_play"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/desktop_prevbt_b" />
+
+            <ImageButton
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                 android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@+id/btn_play"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/desktop_nextbt_b" />
+            <Button
+                android:id="@+id/btn_stop"
+                android:text="停止"
+                android:layout_width="wrap_content"
+                 android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/chose_albumlist" />
+
+        </LinearLayout>
+         
+</LinearLayout>

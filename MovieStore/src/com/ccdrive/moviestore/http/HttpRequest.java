@@ -41,8 +41,8 @@ import android.util.Log;
 
 public class HttpRequest {
      
-	public static  String WEB_ROOT = "http://124.193.177.154:9007/";  
-//	public static  String WEB_ROOT ="http://192.168.1.32:8080/";  
+//	public static  String WEB_ROOT = "http://124.193.177.154:9007/";  
+	public static  String WEB_ROOT ="http://192.168.1.32:8080/";  
 //	http://124.193.177.154:9007/index/softshop!getFile.action?token=myadmin&sid=135909554233700001&type=music
 //	http://192.168.1.32:8080
 //	public static  String WEB_ROOT = "http://42.121.6.154/";
@@ -57,7 +57,7 @@ public class HttpRequest {
 	public static String URL_QUERY_SINGLE_IMAGE_TEST = WEB_ROOT + "download.action?token=myadmin&";
 	public static String URL_QUERY_ALL_BOOK = WEB_ROOT + "index/bookshop.action?token=myadmin&resultType=json";
 	public static String URL_QUERY_SINGLE_BOOK = WEB_ROOT + "index/bookshop!content.action?token=myadmin&resultType=json&&id=";
-	public static String URL_QUERY_STROE_ALL_MOVIE = WEB_ROOT + "index/movieshop.action?token=myadmin&resultType=json";
+	public static String URL_QUERY_STROE_ALL_MOVIE = WEB_ROOT + "index/movieshop.action?token=myadmin&resultType=json&currentPage=";
 	public static String URL_QUERY_SINGLE_MOVIE = WEB_ROOT + "index/movieshop!content.action?token=myadmin&resultType=json&&id=";
 	public static String URL_QUERY_STROE_ALL_PRINT = WEB_ROOT + "index/journalshop.action?token=myadmin&resultType=json";
 	public static String URL_QUERY_SINGLE_PRINT = WEB_ROOT + "index/journalshop!content.action?token=myadmin&resultType=json&&id=";
@@ -66,7 +66,7 @@ public class HttpRequest {
 	public static String URL_QUERY_STROE_ALL_MUSICCHAPTER = WEB_ROOT + "index/musicshop.action?token=myadmin&resultType=json&type=1&currentPage=";
 	public static String URL_QUERY_STROE_ALL_MUSICMV = WEB_ROOT + "index/musicshop.action?token=myadmin&resultType=json&type=0&currentPage=";
 	public static String URL_QUERY_SINGLE_MUSIC = WEB_ROOT + "index/musicshop!content.action?token=myadmin&resultType=json&&id=";
-	public static String URL_QUERY_STROE_ALL_TV = WEB_ROOT + "index/tvplayshop.action?token=myadmin&resultType=json";
+	public static String URL_QUERY_STROE_ALL_TV = WEB_ROOT + "index/tvplayshop.action?token=myadmin&resultType=json&currentPage=";
 	public static String URL_QUERY_SINGLE_TV = WEB_ROOT + "index/tvplayshop!content.action?token=myadmin&resultType=json&&id=";
 	public static String URL_QUERY_STROE_ALL_ANIME = WEB_ROOT + "index/cartoonshop.action?token=myadmin&resultType=json";
 	public static String URL_QUERY_SINGLE_ANIME = WEB_ROOT + "index/cartoonshop!content.action?token=myadmin&resultType=json&&id=";

@@ -54,6 +54,7 @@ import android.widget.Toast;
 
 import com.ccdrive.moviestore.R;
 import com.ccdrive.moviestore.bean.Music;
+import com.ccdrive.moviestore.http.HttpRequest;
 
 public class VitamioPlayer extends Activity {
 	public static final String TAG = "VitamioPlayer";
@@ -79,11 +80,11 @@ public class VitamioPlayer extends Activity {
 
 	private int mVideoLayout = VIDEO_LAYOUT_KEEP;
 
-	public static final int VIDEO_LAYOUT_ORIGIN = 0;// ԭʼ��С
+	public static final int VIDEO_LAYOUT_ORIGIN = 0;// 
 	public static final int VIDEO_LAYOUT_SCALE = 1;//
-	public static final int VIDEO_LAYOUT_STRETCH = 2;// ȫ������
+	public static final int VIDEO_LAYOUT_STRETCH = 2;//
 	public static final int VIDEO_LAYOUT_ZOOM = 3;//
-	public static final int VIDEO_LAYOUT_KEEP = 4;// ���ֱ�������
+	public static final int VIDEO_LAYOUT_KEEP = 4;// 
 
 	private boolean clientControll = false;
 	// -------------------------------------------
@@ -165,7 +166,7 @@ public class VitamioPlayer extends Activity {
 		} else {
 			movie = (Music) i.getSerializableExtra("movie");
 //			String category = movie.getCategory();  //�жϵ�Ӱ���
-			String category="��Ӱ";
+			String category="影视";
 			title = movie.getName();
 //			list = movie.getSTBPlayerUrls();   //�ж��Ƿ�����һ��
 //			if (list.size() > 1)
@@ -173,7 +174,7 @@ public class VitamioPlayer extends Activity {
 			if (category.equals(res.getString(R.string.movie))
 					) {
 //				url = movie.getPc_flv_high_url();
-				url=movie.getDownload_path();
+				url=HttpRequest.URL_QUERY_DOWNLOAD_URL+movie.getDownload_path();
 				mMediaController.allowLoadVideoTask = false;
 			} else {
 				index = i.getIntExtra("index", 0);
@@ -183,7 +184,7 @@ public class VitamioPlayer extends Activity {
 //					finish();
 //					return;
 //				}
-				 url=movie.getDownload_path();
+				 url=HttpRequest.URL_QUERY_DOWNLOAD_URL+movie.getDownload_path();
 				title = movie.getName() + "(" + (index + 1) + ")";
 			}
 		}
@@ -856,7 +857,6 @@ public class VitamioPlayer extends Activity {
 						long newposition = duration * currentProgress / 100;
 						String time = StringUtils.generateTime(newposition)
 								+ "/" + StringUtils.generateTime(duration);
-
 						mMediaController.time.setText(time);
 					}
 				}
@@ -1087,7 +1087,7 @@ public class VitamioPlayer extends Activity {
 					return mMediaPlayer.isPlaying();
 				}
 			} catch (Exception e) {
-				Log.d(TAG, "mediaPlayer.isPlaying() �����ˣ�");
+				Log.d(TAG, "mediaPlayer.isPlaying() ");
 				e.printStackTrace();
 				finish();
 			}

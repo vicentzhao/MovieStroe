@@ -44,8 +44,8 @@ public class Constant {
 		public static final int ORDER_LIST_NUM=100094;//������
 		public static final int ORDER_LIST_ID=100095;//����ID
 		public static final int ORDER_LIST_PAY=100000;//֧��
-		public static final int DOWN_SOFT_LIST=100001;//�����б�
-		public static final int USERLOGIN=100010;//֧��
+		public static final int DOWN_SOFT_LIST=100001;//
+		public static final int USERLOGIN=100010;//
 		
 		//һЩ����
 		public static final int MYMUSIC = 100011;
@@ -58,9 +58,12 @@ public class Constant {
 		public static final String MYMUSIC_CHAPTER=HttpRequest.URL_QUERY_LIST__MOVIESORDER;
 		public static final String MYMUSIC_MV=HttpRequest.URL_QUERY_LIST__TVCORDERED;
 		public static final String MUSICSTORE_APP=HttpRequest.URL_QUERY_STROE_ALL_SOFT;
-		public static final String MUSICSTORE_CHAPTER=HttpRequest.URL_QUERY_STROE_ALL_TV;
+		public static final String MUSICSTORE_CHAPTER=HttpRequest.URL_QUERY_STROE_ALL_MOVIE;
 		public static final String MUSICSTORE_MV=HttpRequest.URL_QUERY_STROE_ALL_TV;
 		public static final String MUSIC_DEFALUT=HttpRequest.URL_QUERY_LIST__SOFTORDERED;
+		
+		
+		 public static final  boolean useVitamio = true;  //是否使用vitamio
 		
 		
 	 

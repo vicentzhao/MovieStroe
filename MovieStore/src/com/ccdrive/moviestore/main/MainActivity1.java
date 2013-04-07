@@ -1,5 +1,4 @@
 package com.ccdrive.moviestore.main;
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -24,7 +23,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -40,7 +38,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
@@ -53,14 +50,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,14 +68,12 @@ import com.ccdrive.moviestore.bean.SoftwareBean;
 import com.ccdrive.moviestore.bean.VersionInfo;
 import com.ccdrive.moviestore.content.CommUtil;
 import com.ccdrive.moviestore.content.Constant;
-import com.ccdrive.moviestore.download.MediaPlayerListener;
-import com.ccdrive.moviestore.download.ThreadForRunnable;
 import com.ccdrive.moviestore.http.HttpRequest;
-import com.ccdrive.moviestore.http.HttpRequest.OnBitmapHttpResponseListener;
 import com.ccdrive.moviestore.http.HttpRequest.OnHttpResponseListener;
 import com.ccdrive.moviestore.http.ImageDownloader;
 import com.ccdrive.moviestore.play.PlayerActivity;
 import com.ccdrive.moviestore.play.StreamingMediaPlayer;
+import com.ccdrive.moviestore.play.VitamioPlayer;
 import com.ccdrive.moviestore.util.JsonUtil;
 import com.ccdrive.moviestore.util.UpdateVersion;
 import com.ccdrive.moviestore.util.XmlParse;
@@ -126,6 +114,7 @@ public class MainActivity1 extends FragmentActivity implements
 	boolean isUpdate = false;;
 	public static String appDownPath;
 	private static ArrayList<SoftwareBean> musicDetailList;
+	//判断左右
 	private static int isWhatLeft = 100013;
 	private static int isWhatRight = 100011;
 	static LayoutInflater inflater;
@@ -140,10 +129,6 @@ public class MainActivity1 extends FragmentActivity implements
 
 	static String currentPath; // 搜索判断
 
-	// 判断是否为最后一页
-	private static boolean isAppLastIndex = false;
-	private static boolean isMusicChapterLastIndex = false;
-	private static boolean isMvLastIndex = false;
 
 	private static int pageCount = 1;
 
@@ -152,9 +137,13 @@ public class MainActivity1 extends FragmentActivity implements
 	// 分页
 	private static PagenationBean page = new PagenationBean();
 	private EditText searchContentEdit;
+	
+	
 	private static Button classify, the_news, recommend, movie, teleplay,
 			anime, softInstallButton, music, record, soft;
 	SharedPreferences sp;
+	
+	
 	private static int[] horItems = { R.id.item_hor_01, R.id.item_hor_02,
 			R.id.item_hor_03, R.id.item_hor_04, R.id.item_hor_05,
 			R.id.item_hor_06, R.id.item_hor_07, R.id.item_hor_08,
@@ -162,6 +151,7 @@ public class MainActivity1 extends FragmentActivity implements
 			R.id.item_hor_12, R.id.item_hor_13, R.id.item_hor_14,
 			R.id.item_hor_15 };
 
+	
 	private static int[] musiclistItem = { R.id.music_item_hor_01,
 			R.id.music_item_hor_02, R.id.music_item_hor_03,
 			R.id.music_item_hor_04, R.id.music_item_hor_05,
@@ -237,13 +227,10 @@ public class MainActivity1 extends FragmentActivity implements
 			store.setSelected(false);
 			isWhatRight = Constant.MYMUSIC;
 			if (isWhatLeft == Constant.MUSICAPP) {
-				initPageParms();
 				setAppStoreList(Constant.MYMUSIC_APP + pageCount);
 			} else if (isWhatLeft == Constant.MUSICCHAPTER) {
-				initPageParms();
 				setMusicChapterList(Constant.MYMUSIC_CHAPTER + pageCount);
 			} else if (isWhatLeft == Constant.MUSICMV) {
-				initPageParms();
 				setMusicMvList(Constant.MYMUSIC_MV + pageCount);
 			}
 			break;
@@ -255,13 +242,10 @@ public class MainActivity1 extends FragmentActivity implements
 			store.setSelected(false);
 			isWhatRight = Constant.MUSICSTORE;
 			if (isWhatLeft == Constant.MUSICAPP) {
-				initPageParms();
 				setAppStoreList(Constant.MUSICSTORE_APP);
 			} else if (isWhatLeft == Constant.MUSICCHAPTER) {
-				initPageParms();
 				setMusicChapterList(Constant.MUSICSTORE_CHAPTER);
 			} else if (isWhatLeft == Constant.MUSICMV) {
-				initPageParms();
 				setMusicMvList(Constant.MUSICSTORE_MV);
 			}
 			myMusic.setSelected(false);
@@ -284,13 +268,10 @@ public class MainActivity1 extends FragmentActivity implements
 						+ pageCount;
 				System.out.println("currpath搜索的地址为===========" + currPath);
 				if (isWhatLeft == Constant.MUSICAPP) {
-					initPageParms();
 					setAppStoreList(currPath);
 				} else if (isWhatLeft == Constant.MUSICCHAPTER) {
-					initPageParms();
 					setMusicChapterList(currPath);
 				} else if (isWhatLeft == Constant.MUSICMV) {
-					initPageParms();
 					setMusicMvList(currPath);
 				}
 			}
@@ -470,31 +451,26 @@ public class MainActivity1 extends FragmentActivity implements
 			if (left_type == Constant.FLFG) {
 				isWhatLeft = Constant.MUSICAPP;
 				if (isWhatRight == Constant.MYMUSIC) {
-					initPageParms();
 					setAppStoreList(Constant.MYMUSIC_APP + pageCount);
 				} else if (isWhatRight == Constant.MUSICSTORE) {
-					initPageParms();
 					setAppStoreList(Constant.MUSICSTORE_APP + pageCount);
 				}
 			} else if (left_type == Constant.AL) {
 
 				isWhatLeft = Constant.MUSICCHAPTER;
 				if (isWhatRight == Constant.MYMUSIC) {
-					initPageParms();
 					setMusicChapterList(Constant.MYMUSIC_CHAPTER + pageCount);
 				} else if (isWhatRight == Constant.MUSICSTORE) {
-					initPageParms();
-					setMusicChapterList(Constant.MUSICSTORE_CHAPTER + pageCount);
+					setMusicChapterList(Constant.MUSICSTORE_CHAPTER);
+//					setMusicChapterList(Constant.MUSICSTORE_CHAPTER + pageCount);
 				}
 			} else if (left_type == Constant.FLWSYS) {
 
 				isWhatLeft = Constant.MUSICMV;
 				if (isWhatRight == Constant.MYMUSIC) {
-					initPageParms();
-					setMusicMvList(Constant.MYMUSIC_MV);
+					setMusicMvList(Constant.MYMUSIC_MV+ pageCount);
 				} else if (isWhatRight == Constant.MUSICSTORE) {
-					initPageParms();
-					setMusicMvList(Constant.MUSICSTORE_MV);
+					setMusicMvList(Constant.MUSICSTORE_MV+ pageCount);
 				}
 			}
 		}
@@ -1140,8 +1116,13 @@ public class MainActivity1 extends FragmentActivity implements
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"缓冲中。。", "正在缓冲请稍后。。");
 		ProDiaglogDimiss(Dialog);
+		String web_url ="";
 		final String musicId = list.get(j).getId();
-		String web_url = HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
+		if(bo==ismusic){
+			web_url= HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
+		}else if(bo==isMv){
+			web_url=HttpRequest.URL_QUERY_LIST_TV+musicId;
+		}
 		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {// 这里的函数是一个内嵌函数如果是函数体比较复杂的话这种方法就不太合适了
 					@Override
 					public void callback(String url, String json,
@@ -1209,7 +1190,12 @@ public class MainActivity1 extends FragmentActivity implements
 						}
 					}
 				});
-		String musicssPath = HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
+		String musicssPath ="";
+		if(bo==ismusic){
+			musicssPath= HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
+		}else if(bo==isMv){
+			musicssPath=HttpRequest.URL_QUERY_SINGLE_TV+musicId;
+		}
 		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {
@@ -1372,9 +1358,6 @@ public class MainActivity1 extends FragmentActivity implements
 								musicAppList = new ArrayList<SoftwareBean>();
 								musicAppList = JsonUtil.getProductList(json);
 								if (musicAppList.size() != 0) {
-									if (musicAppList.size() < 15) {
-										isAppLastIndex = true;
-									}
 									setSoftInfo(musicAppList, path);
 
 								} else {
@@ -1431,9 +1414,7 @@ public class MainActivity1 extends FragmentActivity implements
 	// default UI
 
 	public static void setDefalutView() {
-
 		isWhatRight = Constant.MYMUSIC;
-		initPageParms();
 		setAppStoreList(Constant.MYMUSIC_APP + pageCount);
 	}
 
@@ -1564,8 +1545,19 @@ public class MainActivity1 extends FragmentActivity implements
 
 	// setmvplay
 	public static void setMVPilot(final Music music) {
-	
-		Intent it =  new Intent(aQuery.getContext(),PlayerActivity.class);
+//	
+//		Intent it =  new Intent(aQuery.getContext(),PlayerActivity.class);
+//		
+//		it.putExtra("clientControll", false);
+//		it.putExtra("movie",music);
+//		// i.setClass(aQuery.getContext(), Simplayer.class);
+//		aQuery.getContext().startActivity(it);
+		Intent it;
+		if(Constant.useVitamio){
+			it =  new Intent(aQuery.getContext(),VitamioPlayer.class);
+		}else{
+			 it =  new Intent(aQuery.getContext(),PlayerActivity.class);
+		}
 		
 		it.putExtra("clientControll", false);
 		it.putExtra("movie",music);
@@ -1681,9 +1673,6 @@ public class MainActivity1 extends FragmentActivity implements
 					music_chapterList = new ArrayList<Music>();
 					music_chapterList = JsonUtil.getMusicList(json);
 					if (music_chapterList.size() != 0) {
-						if (music_chapterList.size() < 15) {
-							isMusicChapterLastIndex = true;
-						}
 						setMusicChapterInfo(music_chapterList, path);
 					} else {
 						Toast.makeText(
@@ -1768,9 +1757,6 @@ public class MainActivity1 extends FragmentActivity implements
 					mvlist = new ArrayList<Music>();
 					mvlist = JsonUtil.getMusicList(json);
 					if (mvlist.size() != 0) {
-						if (mvlist.size() < 15) {
-							isMvLastIndex = true;
-						}
 						setMusicMvInfo(mvlist, path);
 					} else {
 						Toast.makeText(
@@ -2103,7 +2089,7 @@ public class MainActivity1 extends FragmentActivity implements
 					XmlParse xp = new XmlParse();
 					versionInfoList = xp.getVersionInfo(is);
 					for (int i = 0; i < versionInfoList.size(); i++) {
-						if ("FigureStore".equals(versionInfoList.get(i)
+						if ("MusicStore".equals(versionInfoList.get(i)
 								.getName())) {
 							String updateVersion = versionInfoList.get(i)
 									.getVersion();
@@ -2199,14 +2185,8 @@ public class MainActivity1 extends FragmentActivity implements
 				if (page.isFirstPage()) {
 					pageCount = 1;
 					Toast.makeText(aQuery.getContext(), "已经是第一页了", 1).show();
-					isAppLastIndex = false;
-					isMusicChapterLastIndex = false;
-					isMvLastIndex = false;
-					tv.setText("第" + pageCount + "页");
+					tv.setText("第" + pageCount + "页"+"/"+"总"+1+"页");
 				} else {
-					isAppLastIndex = false;
-					isMusicChapterLastIndex = false;
-					isMvLastIndex = false;
 					pageCount = page.getCurrentPage()-1;
 					tv.setText("第" + pageCount + "页"+"/"+"总"+page.getTotalPage()+"页");
 					String truePath = path.substring(0,
@@ -2228,45 +2208,27 @@ public class MainActivity1 extends FragmentActivity implements
 			@Override
 			public void onClick(View v) {
 				if(!page.isLastPage()){
-
 				if (what.equals("soft")) {
-					if (isAppLastIndex) {
-						Toast.makeText(aQuery.getContext(), "已经是最后一页了", 1)
-								.show();
-					} else {
 						pageCount = page.getCurrentPage() + 1;
 						tv.setText("第" + pageCount + "页"+"/"+"总"+page.getTotalPage()+"页");
 						String truePath = path.substring(0,
 								path.lastIndexOf("=") + 1);
 						String myPath = truePath + pageCount;
 						setAppStoreList(myPath);
-					}
 				} else if (what.equals("musicChapter")) {
-					if (isMusicChapterLastIndex) {
-						Toast.makeText(aQuery.getContext(), "已经是最后一页了", 1)
-								.show();
-					} else {
 						pageCount = page.getCurrentPage() + 1;;
 						tv.setText("第" + pageCount + "页"+"/"+"总"+page.getTotalPage()+"页");
 						String truePath = path.substring(0,
 								path.lastIndexOf("=") + 1);
 						String myPath = truePath + pageCount;
 						setMusicChapterList(myPath);
-					}
-
 				} else if (what.equals("mv")) {
-					if (isMvLastIndex) {
-						Toast.makeText(aQuery.getContext(), "已经是最后一页了", 1)
-								.show();
-					} else {
 						pageCount = page.getCurrentPage() + 1;
 						tv.setText("第" + pageCount + "页"+"/"+"总"+page.getTotalPage()+"页");
 						String truePath = path.substring(0,
 								path.lastIndexOf("=") + 1);
 						String myPath = truePath + pageCount;
 						setMusicMvList(myPath);
-					}
-
 				}
 			}else{
 				Toast.makeText(aQuery.getContext(), "已经为最后一页了", 1).show();
@@ -2276,18 +2238,6 @@ public class MainActivity1 extends FragmentActivity implements
 
 	}
 
-	/**
-	 * 初始化一些页面参数
-	 * 
-	 * @author zhyq
-	 * 
-	 */
-	public static void initPageParms() {
-		pageCount = 1;
-		isAppLastIndex = false;
-		isMusicChapterLastIndex = false;
-		isMvLastIndex = false;
-	}
 	public static class musicTryplayAsyncTask extends
 			AsyncTask<String, Void, Void> {
 		private ImageButton myBtn;

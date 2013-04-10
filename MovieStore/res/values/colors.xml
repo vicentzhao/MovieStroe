@@ -52,4 +52,8 @@
     <color name="Color_verificationCode">#FF0000</color>
     <color name="green">#00FF00</color>
     <color name="grey">#80abaaaa</color>
+    
+    
+        <color name="GridView_Item_Title">#FFFFFF</color>
+    <color name="GridView_Item_Text">#ff9a9a9a</color>
 </resources>

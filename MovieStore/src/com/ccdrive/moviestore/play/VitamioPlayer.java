@@ -783,7 +783,6 @@ public class VitamioPlayer extends Activity {
 			controllerView.setFocusableInTouchMode(true);
 			popwindow.setAnimationStyle(R.style.AnimationControllerFade);
 			controllerView.setOnTouchListener(new OnTouchListener() {
-
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					// TODO Auto-generated method stub

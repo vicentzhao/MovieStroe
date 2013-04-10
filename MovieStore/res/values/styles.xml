@@ -188,5 +188,22 @@
         <item name="android:windowEnterAnimation">@anim/controller_in</item>
         <item name="android:windowExitAnimation">@anim/controller_out</item>
     </style>
-
+ <style name="H720P_46sp_FontSize">
+        <item name="android:textSize">46.0sp</item>
+    </style>
+    <style name="H720P_32sp_FontSize">
+        <item name="android:textSize">32.0sp</item>
+    </style>
+    <style name="H720P_30sp_FontSize">
+        <item name="android:textSize">30.0sp</item>
+    </style>
+    <style name="H720P_28sp_FontSize">
+        <item name="android:textSize">28.0sp</item>
+    </style>
+    <style name="H720P_24sp_FontSize">
+        <item name="android:textSize">24.0sp</item>
+    </style>
+    <style name="H720P_20sp_FontSize">
+        <item name="android:textSize">20.0sp</item>
+    </style>
 </resources>

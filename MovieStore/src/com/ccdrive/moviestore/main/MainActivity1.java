@@ -124,8 +124,8 @@ public class MainActivity1 extends FragmentActivity implements
 
 	static int whatisplay = 1; // 判断哪个音乐播放。用来暂停或者
 	static StreamingMediaPlayer audioStreamer; // 播放器
-	static int ismusic = 000011; // 判断是否为music 还是mv
-	static int isMv = 000012;
+	static int isFilm = 000011; // 判断是否为music 还是mv
+	static int isTv = 000012;
 
 	static String currentPath; // 搜索判断
 
@@ -158,6 +158,14 @@ public class MainActivity1 extends FragmentActivity implements
 			R.id.music_item_hor_06, R.id.music_item_hor_07,
 			R.id.music_item_hor_08, R.id.music_item_hor_09,
 			R.id.music_item_hor_10 };
+	
+	//tv item
+	private static int[] tvlistItem = { R.id.i_text_episode_text1,
+		R.id.i_text_episode_text2, R.id.i_text_episode_text3,
+		R.id.i_text_episode_text4, R.id.i_text_episode_text5,
+		R.id.i_text_episode_text6, R.id.i_text_episode_text7,
+		R.id.i_text_episode_text8, R.id.i_text_episode_text9,
+		R.id.i_text_episode_text10 };
 	// private static int[] recommendItem =
 	// {R.id.music1,R.id.music2,R.id.music3,
 	// R.id.music4,R.id.music5,R.id.music6,
@@ -231,7 +239,7 @@ public class MainActivity1 extends FragmentActivity implements
 			} else if (isWhatLeft == Constant.MUSICCHAPTER) {
 				setMusicChapterList(Constant.MYMUSIC_CHAPTER + pageCount);
 			} else if (isWhatLeft == Constant.MUSICMV) {
-				setMusicMvList(Constant.MYMUSIC_MV + pageCount);
+				setTVList(Constant.MYMUSIC_MV + pageCount);
 			}
 			break;
 		case R.id.store:
@@ -246,7 +254,7 @@ public class MainActivity1 extends FragmentActivity implements
 			} else if (isWhatLeft == Constant.MUSICCHAPTER) {
 				setMusicChapterList(Constant.MUSICSTORE_CHAPTER);
 			} else if (isWhatLeft == Constant.MUSICMV) {
-				setMusicMvList(Constant.MUSICSTORE_MV);
+				setTVList(Constant.MUSICSTORE_MV);
 			}
 			myMusic.setSelected(false);
 			store.setSelected(true);
@@ -272,7 +280,7 @@ public class MainActivity1 extends FragmentActivity implements
 				} else if (isWhatLeft == Constant.MUSICCHAPTER) {
 					setMusicChapterList(currPath);
 				} else if (isWhatLeft == Constant.MUSICMV) {
-					setMusicMvList(currPath);
+					setTVList(currPath);
 				}
 			}
 			break;
@@ -468,9 +476,9 @@ public class MainActivity1 extends FragmentActivity implements
 
 				isWhatLeft = Constant.MUSICMV;
 				if (isWhatRight == Constant.MYMUSIC) {
-					setMusicMvList(Constant.MYMUSIC_MV+ pageCount);
+					setTVList(Constant.MYMUSIC_MV+ pageCount);
 				} else if (isWhatRight == Constant.MUSICSTORE) {
-					setMusicMvList(Constant.MUSICSTORE_MV+ pageCount);
+					setTVList(Constant.MUSICSTORE_MV+ pageCount);
 				}
 			}
 		}
@@ -614,27 +622,6 @@ public class MainActivity1 extends FragmentActivity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private void initInfoView() {
-		// filmNameText = (TextView) find(R.id.field_filmname);
-		// pageIndex = (TextView) find(R.id.field_page_index);
-		// preBtn = (Button) find(R.id.page_pre);
-		// preBtn.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// prePage();
-		// }
-		// });
-		// nextBtn = (Button) find(R.id.page_next);
-		// nextBtn.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// nextPage();
-		// }
-		// });
-	}
-
 	private static void initHorizontalView() {
 		// initInfoView();
 		itemView.findViewById(R.id.item_hor_05).setNextFocusRightId(
@@ -731,7 +718,6 @@ public class MainActivity1 extends FragmentActivity implements
 
 	/**
 	 * setAllMusic 音乐
-	 * 
 	 * @param list
 	 */
 	public static void setMusicMvInfo(ArrayList<Music> list, String path) {
@@ -832,7 +818,7 @@ public class MainActivity1 extends FragmentActivity implements
 	}
 
 	// 音乐推荐
-	private static void setMusicrecommend(ArrayList<Music> list, final View view) {
+	private static void setMusicrecommend(ArrayList<Music> list, final View view,final int iswhat) {
 		final ArrayList<String> myPathlist = new ArrayList<String>();
 		ImageDownloader Downloader = new ImageDownloader(aQuery.getContext());
 		for (int i = 0; i < 5; i++) {
@@ -869,7 +855,7 @@ public class MainActivity1 extends FragmentActivity implements
 							ImageDownloader downloader = new ImageDownloader(
 									aQuery.getContext());
 							downloader.download(turePath, imageView);
-							setRecommedMusicInfo(sb.getId(), view, sb);
+							setRecommedMusicInfo(sb.getId(), view, sb,iswhat);
 						}
 					});
 		}
@@ -1082,45 +1068,28 @@ public class MainActivity1 extends FragmentActivity implements
 				j = i;
 			}
 		}
-		view.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					if (!isExit) {
-						isExit = true;
-						Toast.makeText(aQuery.getContext(), "再按一次退出程序",
-								Toast.LENGTH_SHORT).show();
-						mHandler.sendEmptyMessageDelayed(0, 2000);
-					} else {
-						builder.dismiss();
-					}
-				}
-				return false;
-			}
-		});
 		// final ListView listview =(ListView)
 		// view.findViewById(R.id.music_detail_list);
-		final Button btn_orderall = (Button) (viewFormusicdetail
-				.findViewById(R.id.btn_order_allmusic));
+//		final Button btn_orderall = (Button) (viewFormusicdetail
+//				.findViewById(R.id.btn_order_allmusic));
 		builder.setContentView(viewFormusicdetail);
 		Window dialogWindow = builder.getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = 800;
+		lp.width = 1000;
 		lp.height = 640;
 		dialogWindow.setAttributes(lp);
-
-		for (int i = 0; i < musiclistItem.length; i++) {
-			view.findViewById(musiclistItem[i]).setVisibility(View.GONE);
+		for (int i = 0; i < tvlistItem.length; i++) {
+			view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
 		}
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"缓冲中。。", "正在缓冲请稍后。。");
 		ProDiaglogDimiss(Dialog);
 		String web_url ="";
 		final String musicId = list.get(j).getId();
-		if(bo==ismusic){
+		if(bo==isFilm){
 			web_url= HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
-		}else if(bo==isMv){
+		}else if(bo==isTv){
 			web_url=HttpRequest.URL_QUERY_LIST_TV+musicId;
 		}
 		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {// 这里的函数是一个内嵌函数如果是函数体比较复杂的话这种方法就不太合适了
@@ -1154,21 +1123,13 @@ public class MainActivity1 extends FragmentActivity implements
 									final String path = musicDetialList.get(i)
 											.getDownload_path();
 									final Music music =musicDetialList.get(i);
-									view.findViewById(musiclistItem[i])
+									view.findViewById(tvlistItem[i])
 											.setVisibility(View.VISIBLE);
-									final int viewid = musiclistItem[i];
-									TextView tv = (TextView) (view
-											.findViewById(musiclistItem[i])
-											.findViewById(R.id.name));
-									final String name = musicDetialList.get(i)
-											.getName();
-									tv.setText(name);
-									view.findViewById(musiclistItem[i])
+									view.findViewById(tvlistItem[i])
 											.setOnClickListener(
 													new OnClickListener() {
 														String appDownPathtrue = HttpRequest.URL_QUERY_DOWNLOAD_URL
 																+ path;
-
 														@Override
 														public void onClick(
 																View v) {
@@ -1177,11 +1138,8 @@ public class MainActivity1 extends FragmentActivity implements
 													});
 								}
 							} catch (JSONException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							// successful ajax call, show status code and json
-							// content
 						} else {
 							Dialog.dismiss();
 							Toast.makeText(aQuery.getContext(),
@@ -1191,9 +1149,9 @@ public class MainActivity1 extends FragmentActivity implements
 					}
 				});
 		String musicssPath ="";
-		if(bo==ismusic){
+		if(bo==isFilm){
 			musicssPath= HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
-		}else if(bo==isMv){
+		}else if(bo==isTv){
 			musicssPath=HttpRequest.URL_QUERY_SINGLE_TV+musicId;
 		}
 		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
@@ -1210,21 +1168,23 @@ public class MainActivity1 extends FragmentActivity implements
 						image_path_boot = jb.getString("PIC");
 						String name = jb.getString("PNAME");
 						String note = jb.getString("PNOTE");
-						String artist = "";
-						String company = "";
-						String language = "";
+						String director = "";
+						String kind = "";
+						String rose = "";
 						String pubdate = "";
-						if (!jb.isNull("COMPANY")) {
-							artist = jb.getString("COMPANY");
+						if (!jb.isNull("DIRECTOR")) {
+							director = jb.getString("DIRECTOR");
 						}
-						if (!jb.isNull("COMPANY")) {
-							company = jb.getString("COMPANY");
+						if (!jb.isNull("KIND")) {
+							kind = jb.getString("KIND");
 						}
-						if (!jb.isNull("LANGUAGE")) {
-							language = jb.getString("LANGUAGE");
+						if (!jb.isNull("ROSE")) {
+							rose = jb.getString("ROSE");
 						}
-						if (!jb.isNull("PUBDATE")) {
-							pubdate = jb.getString("PUBDATE");
+						if (!jb.isNull("RELEASE")) {
+						String 	mypubdate = jb.getString("RELEASE");
+						pubdate =mypubdate.substring(0, mypubdate.lastIndexOf(" "));
+						   
 						}
 						JSONArray postOb = jb.getJSONArray("potype");
 						for (int i = 0; i < postOb.length(); i++) {
@@ -1237,15 +1197,15 @@ public class MainActivity1 extends FragmentActivity implements
 									"PRICE"));
 							postMentList.add(pm);
 						}
-						btn_orderall.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-
-								setOrder(postMentList, orderId);
-
-							}
-						});
+//						btn_orderall.setOnClickListener(new OnClickListener() {
+//
+//							@Override
+//							public void onClick(View v) {
+//
+//								setOrder(postMentList, orderId);
+//
+//							}
+//						});
 						builder.show();
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.musicdetail_text))
@@ -1257,8 +1217,8 @@ public class MainActivity1 extends FragmentActivity implements
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.artist)).setText(aQuery
 								.getContext().getResources()
-								.getString(R.string.artist)
-								+ " : " + artist);
+								.getString(R.string.director)
+								+ " : " + director);
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.Issuedate)).setText(aQuery
 								.getContext().getResources()
@@ -1267,14 +1227,14 @@ public class MainActivity1 extends FragmentActivity implements
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.language)).setText(aQuery
 								.getContext().getResources()
-								.getString(R.string.language)
-								+ " ： " + language);
+								.getString(R.string.rose)
+								+ " ： " + rose);
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.company)).setText(aQuery
 								.getContext().getResources()
-								.getString(R.string.company)
-								+ " ： " + company);
-						setMusicrecommend(list, viewFormusicdetail);
+								.getString(R.string.kind)
+								+ " ： " + kind);
+						setMusicrecommend(list, viewFormusicdetail,bo);
 						String path = HttpRequest.URL_QUERY_SINGLE_IMAGE
 								+ image_path_boot;
 						ImageView imageView = (ImageView) viewFormusicdetail
@@ -1324,7 +1284,6 @@ public class MainActivity1 extends FragmentActivity implements
 			String uslPath = URL_QUERY_SINGLE_IMAGE + url;
 			aQuery.find(horItems[i]).find(R.id.ItemIcon).image(uslPath);
 		}
-
 	}
 
 	// 音乐app
@@ -1368,6 +1327,9 @@ public class MainActivity1 extends FragmentActivity implements
 													.getString(
 															R.string.nocontent),
 											Toast.LENGTH_LONG).show();
+									for (int i = 0; i < horItems.length; i++) {
+										itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+									}
 								}
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
@@ -1394,6 +1356,9 @@ public class MainActivity1 extends FragmentActivity implements
 										aQuery.getContext().getResources()
 												.getString(R.string.nocontent),
 										Toast.LENGTH_LONG).show();
+								for (int i = 0; i < horItems.length; i++) {
+									itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+								}
 							}
 						}
 					}
@@ -1647,7 +1612,7 @@ public class MainActivity1 extends FragmentActivity implements
 			currentPath = path.substring(0, path.lastIndexOf("&"));
 		}
 		initDialog("three");
-		viewFormusicdetail = inflater.inflate(R.layout.music_detail1, null);
+		viewFormusicdetail = inflater.inflate(R.layout.tv_detail, null);
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"loading。。", "please wait。。");
 		ProDiaglogDimiss(Dialog);
@@ -1656,7 +1621,6 @@ public class MainActivity1 extends FragmentActivity implements
 			public void callback(String url, String json, AjaxStatus status) {
 				if (json != null) {
 					JSONObject jsObject;
-				
 						try {
 							jsObject = new JSONObject(json);
 						
@@ -1680,6 +1644,9 @@ public class MainActivity1 extends FragmentActivity implements
 								aQuery.getContext().getResources()
 										.getString(R.string.nocontent),
 								Toast.LENGTH_LONG).show();
+						for (int i = 0; i < horItems.length; i++) {
+							itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+						}
 					}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -1698,12 +1665,18 @@ public class MainActivity1 extends FragmentActivity implements
 												.getString(
 														R.string.checknetwork),
 								Toast.LENGTH_LONG).show();
+						for (int i = 0; i < horItems.length; i++) {
+							itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+						}
 					} else {
 						Toast.makeText(
 								aQuery.getContext(),
 								aQuery.getContext().getResources()
 										.getString(R.string.nocontent),
 								Toast.LENGTH_LONG).show();
+						for (int i = 0; i < horItems.length; i++) {
+							itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+						}
 					}
 				}
 				if (music_chapterList != null) {
@@ -1716,7 +1689,7 @@ public class MainActivity1 extends FragmentActivity implements
 										setMusicDetial(v.getId(),
 												music_chapterList,
 												viewFormusicdetail, orderId,
-												ismusic);
+												isFilm);
 									}
 								});
 					}
@@ -1725,13 +1698,13 @@ public class MainActivity1 extends FragmentActivity implements
 		});
 	}
 
-	// setMV list
-	public static void setMusicMvList(final String path) {
+	// setTv list
+	public static void setTVList(final String path) {
 		if (!isSearch) {
 			currentPath = path.substring(0, path.lastIndexOf("&"));
 		}
 		initDialog("three");
-		viewFormusicdetail = inflater.inflate(R.layout.music_detail1, null);
+		viewFormusicdetail = inflater.inflate(R.layout.tv_detail, null);
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"loading。。", "please wait a moment。。");
 		ProDiaglogDimiss(Dialog);
@@ -1764,6 +1737,9 @@ public class MainActivity1 extends FragmentActivity implements
 								aQuery.getContext().getResources()
 										.getString(R.string.nocontent),
 								Toast.LENGTH_LONG).show();
+						for (int i = 0; i < horItems.length; i++) {
+							itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+						}
 					}} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -1782,12 +1758,18 @@ public class MainActivity1 extends FragmentActivity implements
 												.getString(
 														R.string.checknetwork),
 								Toast.LENGTH_LONG).show();
+						for (int i = 0; i < horItems.length; i++) {
+							itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+						}
 					} else {
 						Toast.makeText(
 								aQuery.getContext(),
 								aQuery.getContext().getResources()
 										.getString(R.string.nocontent),
 								Toast.LENGTH_LONG).show();
+						for (int i = 0; i < horItems.length; i++) {
+							itemView.findViewById(horItems[i]).setVisibility(View.INVISIBLE);
+						}
 					}
 				}
 				if (mvlist.size() != 0) {
@@ -1798,7 +1780,7 @@ public class MainActivity1 extends FragmentActivity implements
 									public void onClick(View v) {
 										setMusicDetial(v.getId(), mvlist,
 												viewFormusicdetail, orderid,
-												isMv);
+												isTv);
 									}
 								});
 					}
@@ -1806,18 +1788,22 @@ public class MainActivity1 extends FragmentActivity implements
 			}
 		});
 	}
-
 	// loading dialog for recommedmusic
 	public static void setRecommedMusicInfo(String musicId, final View view,
-			Music music) {
-		for (int i = 0; i < musiclistItem.length; i++) {
-			view.findViewById(musiclistItem[i]).setVisibility(View.GONE);
+			Music music,int iswhat) {
+		String web_url = null;
+		for (int i = 0; i < tvlistItem.length; i++) {
+			view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
 		}
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"Loading。。", "please wait moment。。");
 		Dialog.show();
 		ProDiaglogDimiss(Dialog);
-		String web_url = HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
+		if(iswhat==isFilm){
+			web_url= HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
+		}else if(iswhat==isTv){
+			web_url=HttpRequest.URL_QUERY_LIST_TV+musicId;
+		}
 		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {
@@ -1842,16 +1828,14 @@ public class MainActivity1 extends FragmentActivity implements
 							final String path = musicDetialList.get(i)
 									.getDownload_path();
 							final Music music =musicDetialList.get(i);
-							final int viewid = musiclistItem[i];
-							view.findViewById(musiclistItem[i]).setVisibility(
+							view.findViewById(tvlistItem[i]).setVisibility(
 									View.VISIBLE);
-							TextView tv = (TextView) (view
-									.findViewById(musiclistItem[i])
-									.findViewById(R.id.name));
+							TextView tv = (TextView) view
+									.findViewById(tvlistItem[i]);
 							final String name = musicDetialList.get(i)
 									.getName();
 							tv.setText(name);
-							view.findViewById(musiclistItem[i])
+							view.findViewById(tvlistItem[i])
 									.setOnClickListener(new OnClickListener() {
 										String appDownPathtrue = HttpRequest.URL_QUERY_DOWNLOAD_URL
 												+ path;
@@ -1895,21 +1879,21 @@ public class MainActivity1 extends FragmentActivity implements
 						image_path_boot = jb.getString("PIC");
 						String name = jb.getString("PNAME");
 						String note = jb.getString("PNOTE");
-						String artist = "";
-						String company = "";
-						String language = "";
+						String director = "";
+						String kind = "";
+						String rose = "";
 						String pubdate = "";
-						if (!jb.isNull("COMPANY")) {
-							artist = jb.getString("COMPANY");
+						if (!jb.isNull("DIRECTOR")) {
+							director = jb.getString("DIRECTOR");
 						}
-						if (!jb.isNull("COMPANY")) {
-							company = jb.getString("COMPANY");
+						if (!jb.isNull("KIND")) {
+							kind = jb.getString("KIND");
 						}
-						if (!jb.isNull("LANGUAGE")) {
-							language = jb.getString("LANGUAGE");
+						if (!jb.isNull("ROSE")) {
+							rose = jb.getString("ROSE");
 						}
-						if (!jb.isNull("PUBDATE")) {
-							pubdate = jb.getString("PUBDATE");
+						if (!jb.isNull("RELEASE")) {
+							pubdate = jb.getString("RELEASE");
 						}
 						JSONArray postOb = jb.getJSONArray("potype");
 						for (int i = 0; i < postOb.length(); i++) {
@@ -1930,8 +1914,8 @@ public class MainActivity1 extends FragmentActivity implements
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.artist)).setText(aQuery
 								.getContext().getResources()
-								.getString(R.string.artist)
-								+ " : " + artist);
+								.getString(R.string.director)
+								+ " : " + director);
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.Issuedate)).setText(aQuery
 								.getContext().getResources()
@@ -1941,12 +1925,12 @@ public class MainActivity1 extends FragmentActivity implements
 								.findViewById(R.id.language)).setText(aQuery
 								.getContext().getResources()
 								.getString(R.string.language)
-								+ " ： " + language);
+								+ " ： " + rose);
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.company)).setText(aQuery
 								.getContext().getResources()
 								.getString(R.string.company)
-								+ " ： " + company);
+								+ " ： " + kind);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -2198,7 +2182,7 @@ public class MainActivity1 extends FragmentActivity implements
 					} else if (what.equals("musicChapter")) {
 						setMusicChapterList(myPath);
 					} else if (what.equals("mv")) {
-						setMusicMvList(myPath);
+						setTVList(myPath);
 					}
 				}
 			}
@@ -2228,7 +2212,7 @@ public class MainActivity1 extends FragmentActivity implements
 						String truePath = path.substring(0,
 								path.lastIndexOf("=") + 1);
 						String myPath = truePath + pageCount;
-						setMusicMvList(myPath);
+						setTVList(myPath);
 				}
 			}else{
 				Toast.makeText(aQuery.getContext(), "已经为最后一页了", 1).show();

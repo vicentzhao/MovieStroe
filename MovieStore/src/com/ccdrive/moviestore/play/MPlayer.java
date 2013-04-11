@@ -42,7 +42,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.ccdrive.moviestore.R;
-import com.ccdrive.moviestore.bean.Music;
+import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.http.HttpRequest;
 import com.rushfusion.vhttpproxy.VHttpProxyDaemon.OnBufferingStatus;
 
@@ -60,7 +60,7 @@ public class MPlayer{
 	
 	private int index = 0;
 	private List<String> episodes = new ArrayList<String>();
-	private Music movie;
+	private Movie movie;
 	
 	private String mUrl = "";
 	
@@ -876,7 +876,7 @@ public class MPlayer{
 			mUrl = i.getStringExtra("url");
 			Log.d(TAG, "clientIP:" + clientIP);
 		} else {
-			movie = (Music) i.getSerializableExtra("movie");
+			movie = (Movie) i.getSerializableExtra("movie");
 			String category = "��Ӱ";
 //			String category = movie.getCategory();
 //			mTitle = movie.getName();

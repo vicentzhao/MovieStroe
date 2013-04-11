@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.ccdrive.moviestore.bean.Music;
+import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.bean.OrderBean;
 import com.ccdrive.moviestore.bean.PayOrderBean;
 import com.ccdrive.moviestore.bean.SoftwareBean;
@@ -24,17 +24,17 @@ public class JsonUtil {
 //	 private String pcname;  //request
 //	 private String pnname;   //way
 //	 private String setname;  //set
-	public static ArrayList<Music> getMusicList(String str) {
-		ArrayList<Music> list  = new ArrayList<Music>();
+	public static ArrayList<Movie> getMusicList(String str) {
+		ArrayList<Movie> list  = new ArrayList<Movie>();
 		if(str == null)return list;
-		Music music = null;
+		Movie music = null;
 		try {
 			JSONObject jsonObject =  new JSONObject(str);
 			JSONArray jsonA = jsonObject.getJSONArray("data");
 			JSONObject jsonB = jsonObject.getJSONObject("page");
 			for(int i =0;i<jsonA.length();i++){
 				JSONObject jsonO = jsonA.getJSONObject(i);
-				music = new Music();
+				music = new Movie();
 				music.setPubName(jsonO.getString("PUBNAME"));
 				music.setImage_path(jsonO.getString("PIC"));
 				music.setName(jsonO.getString("PNAME"));

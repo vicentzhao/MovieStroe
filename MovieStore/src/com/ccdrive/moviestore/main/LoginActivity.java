@@ -16,34 +16,31 @@ import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.ccdrive.moviestore.R;
+import com.ccdrive.moviestore.http.HttpRequest;
 
 public class LoginActivity extends Activity {
 	SharedPreferences sharedPreferences;
-	String tempPath ="http://192.168.1.32:8080/login.action?username=tasss113&password=123456&type=2&driveid=11&mac=11";
+	String tempPath ="http://192.168.1.32:8080/login.action?username=tasss123&password=123456&type=2&driveid=11&mac=11";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		final Intent  i = new Intent(LoginActivity.this,MainActivity1.class);
+		sharedPreferences = getSharedPreferences("userInfo", LoginActivity.MODE_WORLD_READABLE);
+		 String userInfo =  sharedPreferences.getString("userInfo", "");
+		if(userInfo.length()!=0){
+			startActivity(i);
+	     	 finish();
+	         }
         setContentView(R.layout.login);
         final AQuery  aQuery = new AQuery(LoginActivity.this);
         EditText eName =(EditText) findViewById(R.id.login_username);
         EditText ePassword =(EditText) findViewById(R.id.login_pas);
         Button  btn_login=(Button) findViewById(R.id.login);
-        sharedPreferences = getSharedPreferences("userInfo", LoginActivity.MODE_WORLD_READABLE);
-        String userInfo =  sharedPreferences.getString("userInfo", "");
-        final Intent  i = new Intent(LoginActivity.this,MainActivity1.class);
-//        if(userInfo!=null){
-//        	String[] users = userInfo.split(",");
-//            for (String str : users)
-//            {
-//              String name = users[0];
-//              String password= users[1];
-//            }
-//        }
+        Button btn_cancle=(Button) findViewById(R.id.cancel);
         String name = eName.getText().toString().trim();
         String password=ePassword.getText().toString().trim();
         btn_login.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				final ProgressDialog pd = new ProgressDialog(LoginActivity.this);
@@ -55,11 +52,12 @@ public class LoginActivity extends Activity {
 					public void callback(String url, String object,
 							AjaxStatus status) {
 						if(object!=null){
-							System.out.println(object);
 							pd.dismiss();
-							Toast.makeText(aQuery.getContext(), object, 1).show();
-							String ss ="'false'";
+							String ss ="\"fasle\"";
 						if(!ss.equals(object)){
+							SharedPreferences.Editor editor = sharedPreferences.edit();
+							editor.putString("userInfo", "tasss123"+","+"123456");
+							editor.commit();
 							startActivity(i);
 							finish();
 						}else{
@@ -76,7 +74,16 @@ public class LoginActivity extends Activity {
 				});
 			}
 		});
+
+        btn_cancle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+        
         
 	}
-
 }
+

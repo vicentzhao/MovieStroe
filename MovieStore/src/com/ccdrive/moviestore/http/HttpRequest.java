@@ -105,6 +105,7 @@ public class HttpRequest {
 	public static String URL_QUERY_LIST_ORDER_NUM = WEB_ROOT + "index/order!pay.action?resultType=json";//支付获取订单号
 	public static String URL_QUERY_LIST_PAY_ID = WEB_ROOT + "index/pay.action?token=myadmin&resultType=json&num=";//根据订单号得订单id   
 	public static String URL_QUERY_LIST_PAY = WEB_ROOT + "index/pay!pay.action?token=myadmin&resultType=json&id=";//确认支付
+	public static String URL_QUERY_LIST_DELE_ORDER=WEB_ROOT+"index/order!delete.action?olid="; //删除订单
 	public static String URL_QUERY_LIST_PAY_ALL=WEB_ROOT+"index/musicshop!buy.action?token=myadmin"+"&id=";
 	public static String URL_ADD="&type=0&ordertype=";
 	public static String URL_QUERY_LIST__MOVIESORDER=WEB_ROOT+"index/movieshop!order.action?token=myadmin&resultType=json&type=1&currentPage=";//已经订阅的电影
@@ -112,6 +113,8 @@ public class HttpRequest {
 	
 	public static String URL_QUERY_LIST__SOFTORDERED=WEB_ROOT+"index/softshop!order.action?token=myadmin&resultType=json&type=0&currentPage=";//已经订阅的软件
 			
+	public static String URL_QUERY_LOGIN=WEB_ROOT+"login.action?";
+	public static String URL_QUERY_LOGIN_TEMP="http://192.168.1.32:8080/login.action?username=tasss113&password=123456&type=2&driveid=11&mac=11";
 	
 	public static String URL_UPDATE =WEB_ROOT+"apk/apk.xml";
 	public static String URL_UPDATE_ROOT=WEB_ROOT+"apk/";

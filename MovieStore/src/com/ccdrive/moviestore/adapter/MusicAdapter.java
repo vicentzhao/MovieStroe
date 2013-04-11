@@ -12,18 +12,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ccdrive.moviestore.R;
-import com.ccdrive.moviestore.bean.Music;
+import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.content.Constant;
 import com.ccdrive.moviestore.http.HttpRequest;
 import com.ccdrive.moviestore.main.MainActivity1;
 
 public class MusicAdapter extends BaseAdapter {
 	private Context mContext;
-	ArrayList<Music> list;
+	ArrayList<Movie> list;
 	private LayoutInflater inflater;
 	private int isWhatRight;
 
-	public MusicAdapter(Context c, ArrayList<Music> list,int iswhat) {
+	public MusicAdapter(Context c, ArrayList<Movie> list,int iswhat) {
 		mContext = c;
 		this.list = list;
 		inflater = LayoutInflater.from(mContext);

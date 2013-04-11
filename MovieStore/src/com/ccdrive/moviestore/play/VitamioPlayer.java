@@ -53,7 +53,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ccdrive.moviestore.R;
-import com.ccdrive.moviestore.bean.Music;
+import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.http.HttpRequest;
 
 public class VitamioPlayer extends Activity {
@@ -150,7 +150,7 @@ public class VitamioPlayer extends Activity {
 
 	private int index = 0;
 //	private List<String> list = new ArrayList<String>();
-	private Music movie;
+	private Movie movie;
 
 	public void initData() {
 		Intent i = getIntent();
@@ -164,7 +164,7 @@ public class VitamioPlayer extends Activity {
 			url = i.getStringExtra("url");
 			Log.d(TAG, "clientIP-->" + clientIP);
 		} else {
-			movie = (Music) i.getSerializableExtra("movie");
+			movie = (Movie) i.getSerializableExtra("movie");
 //			String category = movie.getCategory();  //�жϵ�Ӱ���
 			String category="影视";
 			title = movie.getName();

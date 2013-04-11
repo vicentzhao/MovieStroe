@@ -40,8 +40,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -59,7 +59,7 @@ import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.ccdrive.moviestore.R;
 import com.ccdrive.moviestore.adapter.MusicAdapter;
-import com.ccdrive.moviestore.bean.Music;
+import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.bean.OrderBean;
 import com.ccdrive.moviestore.bean.PagenationBean;
 import com.ccdrive.moviestore.bean.PayOrderBean;
@@ -103,7 +103,7 @@ public class MainActivity1 extends FragmentActivity implements
 	public static boolean isFragment = true;
 	private boolean isfirst = true;
 	private static MediaPlayer mp;
-	static ArrayList<Music> musicList;
+	static ArrayList<Movie> musicList;
 	static ArrayList<SoftwareBean> musicAppList;
 	static Dialog builder;
 	private static View viewForsoftDetail;
@@ -118,8 +118,8 @@ public class MainActivity1 extends FragmentActivity implements
 	private static int isWhatLeft = 100013;
 	private static int isWhatRight = 100011;
 	static LayoutInflater inflater;
-	static ArrayList<Music> music_chapterList;
-	static ArrayList<Music> mvlist;
+	static ArrayList<Movie> music_chapterList;
+	static ArrayList<Movie> mvlist;
 	private static musicTryplayAsyncTask musicTryTask;
 
 	static int whatisplay = 1; // 判断哪个音乐播放。用来暂停或者
@@ -720,7 +720,7 @@ public class MainActivity1 extends FragmentActivity implements
 	 * setAllMusic 音乐
 	 * @param list
 	 */
-	public static void setMusicMvInfo(ArrayList<Music> list, String path) {
+	public static void setMusicMvInfo(ArrayList<Movie> list, String path) {
 		for (int i = 0; i < horItems.length; i++) {
 			itemView.findViewById(horItems[14 - i]).setVisibility(View.VISIBLE);
 		}
@@ -744,7 +744,7 @@ public class MainActivity1 extends FragmentActivity implements
 		}
 	}
 
-	public static void setMusicChapterInfo(ArrayList<Music> list, String path) {
+	public static void setMusicChapterInfo(ArrayList<Movie> list, String path) {
 		for (int i = 0; i < horItems.length; i++) {
 			itemView.findViewById(horItems[14 - i]).setVisibility(View.VISIBLE);
 		}
@@ -818,7 +818,7 @@ public class MainActivity1 extends FragmentActivity implements
 	}
 
 	// 音乐推荐
-	private static void setMusicrecommend(ArrayList<Music> list, final View view,final int iswhat) {
+	private static void setMusicrecommend(ArrayList<Movie> list, final View view,final int iswhat) {
 		final ArrayList<String> myPathlist = new ArrayList<String>();
 		ImageDownloader Downloader = new ImageDownloader(aQuery.getContext());
 		for (int i = 0; i < 5; i++) {
@@ -832,7 +832,7 @@ public class MainActivity1 extends FragmentActivity implements
 			}
 		}
 		for (int i = 0; i < ((list.size() <= 5) ? list.size() : 5); i++) {
-			final Music sb = list.get(i);
+			final Movie sb = list.get(i);
 			String image_path = sb.getImage_path();
 			final String title = sb.getName();
 			final String turePath = HttpRequest.URL_QUERY_SINGLE_IMAGE
@@ -1060,7 +1060,7 @@ public class MainActivity1 extends FragmentActivity implements
 	/**
 	 * setMusicDetial param 音乐详细界面
 	 */
-	public static void setMusicDetial(int id, final ArrayList<Music> list,
+	public static void setMusicDetial(int id, final ArrayList<Movie> list,
 			final View view, final String orderId, final int bo) {
 		int j = 0;
 		for (int i = 0; i < horItems.length; i++) {
@@ -1079,8 +1079,16 @@ public class MainActivity1 extends FragmentActivity implements
 		lp.width = 1000;
 		lp.height = 640;
 		dialogWindow.setAttributes(lp);
+		if(isWhatLeft==Constant.MUSICCHAPTER){
 		for (int i = 0; i < tvlistItem.length; i++) {
-			view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
+			view.findViewById(tvlistItem[i]).setVisibility(View.GONE);
+			TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+			tv.setWidth(LayoutParams.WRAP_CONTENT);
+		}
+		}else{
+			for (int i = 0; i < tvlistItem.length; i++) {
+				view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
+			}
 		}
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"缓冲中。。", "正在缓冲请稍后。。");
@@ -1097,39 +1105,60 @@ public class MainActivity1 extends FragmentActivity implements
 					public void callback(String url, String json,
 							AjaxStatus status) {
 						if (json != null) {
-							ArrayList<Music> musicDetialList = new ArrayList<Music>();
+							ArrayList<Movie> musicDetialList = new ArrayList<Movie>();
 							System.out.println("下载的数据" + "====" + json);
 							Dialog.dismiss();
 							try {
 								JSONArray ja = new JSONArray(json);
 								for (int i = 0; i < ja.length(); i++) {
-									Music music = new Music();
+									Movie music = new Movie();
 									JSONObject jb = ja.getJSONObject(i);
 									String sid = jb.getString("sid");
 									String musicpath = jb.getString("filepath");
 									String title = jb.getString("title");
+									String seq =jb.getString("seq");
 									music.setDownload_path(musicpath);
 									music.setId(sid);
 									music.setName(title);
+									music.setSeq(seq);
 									musicDetialList.add(music);
+									
 								}
 
 								// MusicAdapter myMusicAdapter = new
 								// MusicAdapter(aQuery.getContext(),
 								// musicDetialList,isWhatRight);
 								// listview.setAdapter(myMusicAdapter);
-
+								int temp = 0;//级数常量
 								for (int i = 0; i < musicDetialList.size(); i++) {
-									final String path = musicDetialList.get(i)
-											.getDownload_path();
-									final Music music =musicDetialList.get(i);
+									final Movie music =musicDetialList.get(i);
+									if(isWhatLeft==Constant.MUSICCHAPTER){
+									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+									tv.setWidth(LayoutParams.WRAP_CONTENT);
 									view.findViewById(tvlistItem[i])
 											.setVisibility(View.VISIBLE);
+									tv.setText(music.getName());
+									}else{
+										String seq = music.getSeq();
+										if(seq.length()!=0){
+											TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+											tv.setWidth(LayoutParams.WRAP_CONTENT);
+											view.findViewById(tvlistItem[i])
+													.setVisibility(View.VISIBLE);
+											tv.setText(seq);
+											temp =Integer.parseInt(seq);
+										}else{
+											TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+											tv.setWidth(LayoutParams.WRAP_CONTENT);
+											view.findViewById(tvlistItem[i])
+													.setVisibility(View.VISIBLE);
+											temp =temp+1;
+											tv.setText(temp+"");
+										}
+									}
 									view.findViewById(tvlistItem[i])
 											.setOnClickListener(
 													new OnClickListener() {
-														String appDownPathtrue = HttpRequest.URL_QUERY_DOWNLOAD_URL
-																+ path;
 														@Override
 														public void onClick(
 																View v) {
@@ -1318,7 +1347,7 @@ public class MainActivity1 extends FragmentActivity implements
 								musicAppList = JsonUtil.getProductList(json);
 								if (musicAppList.size() != 0) {
 									setSoftInfo(musicAppList, path);
-
+									
 								} else {
 									Toast.makeText(
 											aQuery.getContext(),
@@ -1509,7 +1538,7 @@ public class MainActivity1 extends FragmentActivity implements
 //	}
 
 	// setmvplay
-	public static void setMVPilot(final Music music) {
+	public static void setMVPilot(final Movie music) {
 //	
 //		Intent it =  new Intent(aQuery.getContext(),PlayerActivity.class);
 //		
@@ -1634,7 +1663,7 @@ public class MainActivity1 extends FragmentActivity implements
 						page.init(currentPage, pageSize, totalRows);
 						TextView tv = (TextView) (itemView.findViewById(R.id.field_page_index));
 						tv.setText("第" + page.getCurrentPage() + "页"+"/"+"总"+page.getTotalPage()+"页");
-					music_chapterList = new ArrayList<Music>();
+					music_chapterList = new ArrayList<Movie>();
 					music_chapterList = JsonUtil.getMusicList(json);
 					if (music_chapterList.size() != 0) {
 						setMusicChapterInfo(music_chapterList, path);
@@ -1727,7 +1756,7 @@ public class MainActivity1 extends FragmentActivity implements
 					page.init(currentPage, pageSize, totalRows);
 					TextView tv = (TextView) (itemView.findViewById(R.id.field_page_index));
 					tv.setText("第" + page.getCurrentPage() + "页"+"/"+"总"+page.getTotalPage()+"页");
-					mvlist = new ArrayList<Music>();
+					mvlist = new ArrayList<Movie>();
 					mvlist = JsonUtil.getMusicList(json);
 					if (mvlist.size() != 0) {
 						setMusicMvInfo(mvlist, path);
@@ -1790,7 +1819,7 @@ public class MainActivity1 extends FragmentActivity implements
 	}
 	// loading dialog for recommedmusic
 	public static void setRecommedMusicInfo(String musicId, final View view,
-			Music music,int iswhat) {
+			Movie music,final int iswhat) {
 		String web_url = null;
 		for (int i = 0; i < tvlistItem.length; i++) {
 			view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
@@ -1808,13 +1837,13 @@ public class MainActivity1 extends FragmentActivity implements
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {
 				if (json != null) {
-					final ArrayList<Music> musicDetialList = new ArrayList<Music>();
+					final ArrayList<Movie> musicDetialList = new ArrayList<Movie>();
 					System.out.println("下载的数据" + "====" + json);
 					Dialog.dismiss();
 					try {
 						JSONArray ja = new JSONArray(json);
 						for (int i = 0; i < ja.length(); i++) {
-							Music music = new Music();
+							Movie music = new Movie();
 							JSONObject jb = ja.getJSONObject(i);
 							String sid = jb.getString("sid");
 							String musicpath = jb.getString("filepath");
@@ -1827,37 +1856,28 @@ public class MainActivity1 extends FragmentActivity implements
 						for (int i = 0; i < musicDetialList.size(); i++) {
 							final String path = musicDetialList.get(i)
 									.getDownload_path();
-							final Music music =musicDetialList.get(i);
+							final Movie music =musicDetialList.get(i);
 							view.findViewById(tvlistItem[i]).setVisibility(
 									View.VISIBLE);
+							if(iswhat==isFilm){
 							TextView tv = (TextView) view
 									.findViewById(tvlistItem[i]);
 							final String name = musicDetialList.get(i)
 									.getName();
 							tv.setText(name);
+							}
 							view.findViewById(tvlistItem[i])
 									.setOnClickListener(new OnClickListener() {
-										String appDownPathtrue = HttpRequest.URL_QUERY_DOWNLOAD_URL
-												+ path;
-
 										@Override
 										public void onClick(View v) {
-//											if (isWhatLeft == Constant.MUSICCHAPTER) {
-//												setMusicPilot(appDownPathtrue,
-//														view, viewid);
-//											} else if (isWhatLeft == Constant.MUSICMV) {
-//												setMVPilot(music);
-//											}
 											setMVPilot(music);
 										}
 									});
 						}
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					Dialog.dismiss();
-					// successful ajax call, show status code and json content
 				} else {
 					Toast.makeText(aQuery.getContext(),
 							"Error:" + status.getCode(), Toast.LENGTH_LONG)
@@ -1865,7 +1885,12 @@ public class MainActivity1 extends FragmentActivity implements
 				}
 			}
 		});
-		String musicssPath = HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
+		String musicssPath = null  ;
+		if(iswhat==isFilm){
+			musicssPath= HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
+		}else if(iswhat==isTv){
+			musicssPath=HttpRequest.URL_QUERY_SINGLE_TV+musicId;
+		}
 		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
 			@Override
 			public void callback(String url, String json, AjaxStatus status) {
@@ -2073,7 +2098,7 @@ public class MainActivity1 extends FragmentActivity implements
 					XmlParse xp = new XmlParse();
 					versionInfoList = xp.getVersionInfo(is);
 					for (int i = 0; i < versionInfoList.size(); i++) {
-						if ("MusicStore".equals(versionInfoList.get(i)
+						if ("MovieStore".equals(versionInfoList.get(i)
 								.getName())) {
 							String updateVersion = versionInfoList.get(i)
 									.getVersion();
@@ -2277,9 +2302,6 @@ public class MainActivity1 extends FragmentActivity implements
 			  }
 		  });
 	  }
-		@Override
-		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			// TODO Auto-generated method stub
-			return super.onKeyUp(keyCode, event);
-		}
+	  
+	  
 }

@@ -93,7 +93,7 @@ public class MPlayer{
 	private int mPosition = -1;
 	private int mDuration = -1;
 	
-	private boolean useHttpProxy = true;
+	private boolean useHttpProxy = false;
 	
 	public boolean isHttpProxy() {
 		return useHttpProxy;

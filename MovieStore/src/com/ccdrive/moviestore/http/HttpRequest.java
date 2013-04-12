@@ -70,7 +70,7 @@ public class HttpRequest {
 	public static String URL_QUERY_SINGLE_TV = WEB_ROOT + "index/tvplayshop!content.action?token=myadmin&resultType=json&&id=";
 	public static String URL_QUERY_STROE_ALL_ANIME = WEB_ROOT + "index/cartoonshop.action?token=myadmin&resultType=json";
 	public static String URL_QUERY_SINGLE_ANIME = WEB_ROOT + "index/cartoonshop!content.action?token=myadmin&resultType=json&&id=";
-	public static String URL_QUERY_STROE_ALL_SOFT = WEB_ROOT + "index/softshop.action?token=myadmin&resultType=json&type=0&currentPage=";
+	public static String URL_QUERY_STROE_ALL_SOFT = WEB_ROOT + "index/softshop.action?token=myadmin&resultType=json&type=1&currentPage=";
 	public static String URL_QUERY_SINGLE_SOFT = WEB_ROOT + "index/softshop!content.action?token=myadmin&resultType=json&&id=";
 	
 	public static String URL_QUERY_LIST_RECORD = WEB_ROOT + "index/tapeshop!getworks.action?token=myadmin&id=";
@@ -111,7 +111,7 @@ public class HttpRequest {
 	public static String URL_QUERY_LIST__MOVIESORDER=WEB_ROOT+"index/movieshop!order.action?token=myadmin&resultType=json&type=1&currentPage=";//已经订阅的电影
 	public static String URL_QUERY_LIST__TVCORDERED=WEB_ROOT+"index/tvplayshop!order.action?token=myadmin&resultType=json&type=0&currentPage=";//已经订阅的mv
 	
-	public static String URL_QUERY_LIST__SOFTORDERED=WEB_ROOT+"index/softshop!order.action?token=myadmin&resultType=json&type=0&currentPage=";//已经订阅的软件
+	public static String URL_QUERY_LIST__SOFTORDERED=WEB_ROOT+"index/softshop!order.action?token=myadmin&resultType=json&type=1&currentPage=";//已经订阅的软件
 			
 	public static String URL_QUERY_LOGIN=WEB_ROOT+"login.action?";
 	public static String URL_QUERY_LOGIN_TEMP="http://192.168.1.32:8080/login.action?username=tasss113&password=123456&type=2&driveid=11&mac=11";

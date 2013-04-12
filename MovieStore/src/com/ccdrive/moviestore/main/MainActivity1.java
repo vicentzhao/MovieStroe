@@ -50,6 +50,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +61,6 @@ import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.ccdrive.moviestore.R;
-import com.ccdrive.moviestore.adapter.MusicAdapter;
 import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.bean.OrderBean;
 import com.ccdrive.moviestore.bean.PagenationBean;
@@ -96,7 +98,6 @@ public class MainActivity1 extends FragmentActivity implements
 	public static View mainView;
 	public static View itemView;
 	public static Button myMusic, store, serch;
-	public static MusicAdapter musicAdapter;
 	public static ArrayList<HashMap<String, String>> musicTestArrayList;
 	private static AQuery aQuery;
 	private static SharedPreferences.Editor editor;
@@ -859,7 +860,6 @@ public class MainActivity1 extends FragmentActivity implements
 						}
 					});
 		}
-
 	}
 
 	/**
@@ -1068,10 +1068,8 @@ public class MainActivity1 extends FragmentActivity implements
 				j = i;
 			}
 		}
-		// final ListView listview =(ListView)
-		// view.findViewById(R.id.music_detail_list);
-//		final Button btn_orderall = (Button) (viewFormusicdetail
-//				.findViewById(R.id.btn_order_allmusic));
+		final Button btn_orderall = (Button) (viewFormusicdetail
+				.findViewById(R.id.btn_order_allmusic));
 		builder.setContentView(viewFormusicdetail);
 		Window dialogWindow = builder.getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -1116,11 +1114,14 @@ public class MainActivity1 extends FragmentActivity implements
 									String sid = jb.getString("sid");
 									String musicpath = jb.getString("filepath");
 									String title = jb.getString("title");
-									String seq =jb.getString("seq");
+									String seq = null;
+									if(!jb.isNull("seq")){
+									seq =jb.getString("seq");
+									}
+									music.setSeq(seq);
 									music.setDownload_path(musicpath);
 									music.setId(sid);
 									music.setName(title);
-									music.setSeq(seq);
 									musicDetialList.add(music);
 									
 								}
@@ -1135,8 +1136,7 @@ public class MainActivity1 extends FragmentActivity implements
 									if(isWhatLeft==Constant.MUSICCHAPTER){
 									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
 									tv.setWidth(LayoutParams.WRAP_CONTENT);
-									view.findViewById(tvlistItem[i])
-											.setVisibility(View.VISIBLE);
+									tv.setVisibility(View.VISIBLE);
 									tv.setText(music.getName());
 									}else{
 										String seq = music.getSeq();
@@ -1226,15 +1226,12 @@ public class MainActivity1 extends FragmentActivity implements
 									"PRICE"));
 							postMentList.add(pm);
 						}
-//						btn_orderall.setOnClickListener(new OnClickListener() {
-//
-//							@Override
-//							public void onClick(View v) {
-//
-//								setOrder(postMentList, orderId);
-//
-//							}
-//						});
+						btn_orderall.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								setOrder(postMentList, orderId);
+							}
+						});
 						builder.show();
 						((TextView) viewFormusicdetail
 								.findViewById(R.id.musicdetail_text))
@@ -1802,7 +1799,7 @@ public class MainActivity1 extends FragmentActivity implements
 					}
 				}
 				if (mvlist.size() != 0) {
-					for (int i = 0; i < horItems.length; i++) {
+					for (int i = 0; i < mvlist.size(); i++) {
 						final String orderid = mvlist.get(i).getId();
 						itemView.findViewById(horItems[i]).setOnClickListener(
 								new OnClickListener() {
@@ -1820,9 +1817,15 @@ public class MainActivity1 extends FragmentActivity implements
 	// loading dialog for recommedmusic
 	public static void setRecommedMusicInfo(String musicId, final View view,
 			Movie music,final int iswhat) {
+		
 		String web_url = null;
 		for (int i = 0; i < tvlistItem.length; i++) {
-			view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
+			if(isWhatLeft==Constant.MUSICCHAPTER){
+			view.findViewById(tvlistItem[i]).setVisibility(View.GONE);
+			
+			}else{
+				view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
+			}
 		}
 		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
 				"Loading。。", "please wait moment。。");
@@ -1848,31 +1851,52 @@ public class MainActivity1 extends FragmentActivity implements
 							String sid = jb.getString("sid");
 							String musicpath = jb.getString("filepath");
 							String title = jb.getString("title");
+							String seq = null;
+							if(!jb.isNull("seq")){
+							seq =jb.getString("seq");
+							}
+							music.setSeq(seq);
 							music.setDownload_path(musicpath);
 							music.setId(sid);
 							music.setName(title);
 							musicDetialList.add(music);
 						}
+						int temp = 0;//级数常量
 						for (int i = 0; i < musicDetialList.size(); i++) {
-							final String path = musicDetialList.get(i)
-									.getDownload_path();
+							
 							final Movie music =musicDetialList.get(i);
-							view.findViewById(tvlistItem[i]).setVisibility(
-									View.VISIBLE);
-							if(iswhat==isFilm){
-							TextView tv = (TextView) view
-									.findViewById(tvlistItem[i]);
-							final String name = musicDetialList.get(i)
-									.getName();
-							tv.setText(name);
+							if(isWhatLeft==Constant.MUSICCHAPTER){
+							TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+							tv.setWidth(LayoutParams.WRAP_CONTENT);
+							tv.setVisibility(View.VISIBLE);
+							tv.setText(music.getName());
+							}else{
+								String seq = music.getSeq();
+								if(seq.length()!=0){
+									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+									tv.setWidth(LayoutParams.WRAP_CONTENT);
+									view.findViewById(tvlistItem[i])
+											.setVisibility(View.VISIBLE);
+									tv.setText(seq);
+									temp =Integer.parseInt(seq);
+								}else{
+									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
+									tv.setWidth(LayoutParams.WRAP_CONTENT);
+									view.findViewById(tvlistItem[i])
+											.setVisibility(View.VISIBLE);
+									temp =temp+1;
+									tv.setText(temp+"");
+								}
 							}
 							view.findViewById(tvlistItem[i])
-									.setOnClickListener(new OnClickListener() {
-										@Override
-										public void onClick(View v) {
-											setMVPilot(music);
-										}
-									});
+									.setOnClickListener(
+											new OnClickListener() {
+												@Override
+												public void onClick(
+														View v) {
+														setMVPilot(music);
+												}
+											});
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -1984,90 +2008,93 @@ public class MainActivity1 extends FragmentActivity implements
 			myRadio[i] = type + "/" + price;
 
 		}
-		// final View view = inflater.inflate(R.layout.orderstype, null);
-		// for (int i = 0; i <orderRadioItem.length; i++) {
-		// view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
-		// }
-		// for (int i = 0; i <postMentList.size(); i++) {
-		// view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
-		// RadioButton btn_rb=(RadioButton)
-		// view.findViewById(orderRadioItem[i]);
-		// String typeE =postMentList.get(i).getType();
-		// if(typeE.equals("day")){
-		// btn_rb.setText("day/"+postMentList.get(i).getPrice());
-		// btn_rb.setVisibility(View.VISIBLE);
-		// }
-		// if(typeE.equals("month")){
-		// btn_rb.setText("month/"+postMentList.get(i).getPrice());
-		// btn_rb.setVisibility(View.VISIBLE);
-		// }
-		// if(typeE.equals("quarter")){
-		// btn_rb.setText("quarter/"+postMentList.get(i).getPrice());
-		// btn_rb.setVisibility(View.VISIBLE);
-		// }
-		// if(typeE.equals("year")){
-		// btn_rb.setText("year/"+postMentList.get(i).getPrice());
-		// btn_rb.setVisibility(View.VISIBLE);
-		// }
-		// }
-		// final Dialog dl = new Dialog(aQuery.getContext());
-		// dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// dl.setContentView(view);
-		// Window dialogWindow = dl.getWindow();
-		// WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-		// dialogWindow.setGravity(Gravity.CENTER);
-		// lp.width = 600;
-		// lp.height =200;
-		// dialogWindow.setAttributes(lp);
-		// dl.show();
-		// RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
-		// group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		// @Override
-		// public void onCheckedChanged(RadioGroup group, int checkedId) {
-		// // TODO Auto-generated method stub
-		//
-		//
-		// }
-		// });
+		 final View view = inflater.inflate(R.layout.orderstype, null);
+		 for (int i = 0; i <orderRadioItem.length; i++) {
+		 view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
+		 }
+		 for (int i = 0; i <postMentList.size(); i++) {
+		 view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
+		 RadioButton btn_rb=(RadioButton)
+		 view.findViewById(orderRadioItem[i]);
+		 String typeE =postMentList.get(i).getType();
+		 if(typeE.equals("day")){
+		 btn_rb.setText("day/"+postMentList.get(i).getPrice());
+		 btn_rb.setVisibility(View.VISIBLE);
+		 }
+		 if(typeE.equals("month")){
+		 btn_rb.setText("month/"+postMentList.get(i).getPrice());
+		 btn_rb.setVisibility(View.VISIBLE);
+		 }
+		 if(typeE.equals("quarter")){
+		 btn_rb.setText("quarter/"+postMentList.get(i).getPrice());
+		 btn_rb.setVisibility(View.VISIBLE);
+		 }
+		 if(typeE.equals("year")){
+		 btn_rb.setText("year/"+postMentList.get(i).getPrice());
+		 btn_rb.setVisibility(View.VISIBLE);
+		 }
+		 }
+		 final Dialog dl = new Dialog(aQuery.getContext());
+		 dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 dl.setContentView(view);
+		 Window dialogWindow = dl.getWindow();
+		 WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+		 dialogWindow.setGravity(Gravity.CENTER);
+		 lp.width = 600;
+		 lp.height =200;
+		 dialogWindow.setAttributes(lp);
+		 dl.show();
+		 RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
+		 group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		 @Override
+		 public void onCheckedChanged(RadioGroup group, int checkedId) {
+		 // TODO Auto-generated method stub
+			 int checkedRadioButtonId = group.getCheckedRadioButtonId();
+			                   //根据ID获取RadioButton的实例
+			 RadioButton         RadioButtonrb = (RadioButton)view.findViewById(checkedRadioButtonId);
+			               System.out.println("订购的id为"+RadioButtonrb.getText());
+		
+		 }
+		 });
 
-		new AlertDialog.Builder(aQuery.getContext())
-				.setTitle("请选择")
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setSingleChoiceItems(myRadio, 0,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-								Toast.makeText(aQuery.getContext(), which + "",
-										1).show();
-								String type = postMentList.get(which).getType();
-								String url = HttpRequest.URL_QUERY_LIST_PAY_ALL
-										+ id + HttpRequest.URL_ADD + type;
-								String result;
-								System.out.println("订购的地址为：===" + url);
-								try {
-									HttpGet request = new HttpGet(url);
-									// 绑定到请求 Entry
-									// 发送请求
-									HttpResponse response = new DefaultHttpClient()
-											.execute(request);
-									// 得到应答的字符串，这也是一个 JSON 格式保存的数据
-									result = EntityUtils.toString(response
-											.getEntity());
-									System.out.println("返回的数据============="
-											+ result);
-									Toast.makeText(aQuery.getContext(),
-											"返回的数据=============" + result, 1)
-											.show();
-
-								} catch (Exception e) {
-
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-
-								}
-							}
-						}).setNegativeButton("取消", null).show();
+//		new AlertDialog.Builder(aQuery.getContext())
+//				.setTitle("请选择")
+//				.setIcon(android.R.drawable.ic_dialog_info)
+//				.setSingleChoiceItems(myRadio, 0,
+//						new DialogInterface.OnClickListener() {
+//							public void onClick(DialogInterface dialog,
+//									int which) {
+//								dialog.dismiss();
+//								Toast.makeText(aQuery.getContext(), which + "",
+//										1).show();
+//								String type = postMentList.get(which).getType();
+//								String url = HttpRequest.URL_QUERY_LIST_PAY_ALL
+//										+ id + HttpRequest.URL_ADD + type;
+//								String result;
+//								System.out.println("订购的地址为：===" + url);
+//								try {
+//									HttpGet request = new HttpGet(url);
+//									// 绑定到请求 Entry
+//									// 发送请求
+//									HttpResponse response = new DefaultHttpClient()
+//											.execute(request);
+//									// 得到应答的字符串，这也是一个 JSON 格式保存的数据
+//									result = EntityUtils.toString(response
+//											.getEntity());
+//									System.out.println("返回的数据============="
+//											+ result);
+//									Toast.makeText(aQuery.getContext(),
+//											"返回的数据=============" + result, 1)
+//											.show();
+//
+//								} catch (Exception e) {
+//
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//
+//								}
+//							}
+//						}).setNegativeButton("取消", null).show();
 	}
 
 	/**
@@ -2302,6 +2329,4 @@ public class MainActivity1 extends FragmentActivity implements
 			  }
 		  });
 	  }
-	  
-	  
 }

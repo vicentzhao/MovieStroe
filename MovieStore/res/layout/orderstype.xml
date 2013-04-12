@@ -1,75 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical" 
-android:layout_width="fill_parent"
-android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-<TextView 
-android:layout_width="fill_parent"
-android:layout_height="wrap_content" 
-android:text="订单消息"
-android:gravity="center_horizontal"
-android:id="@+id/textView" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="订单消息" />
 
-<!--
+    <!--
 RadioButton - 单选框控件
 RadioGroup - 对其内的单选框控件做分组
-checkedButton - 指定组内被选中的单选框的 ID
--->
-<RadioGroup 
-android:id="@+id/radioGroup"
-android:layout_width="fill_parent" 
-android:layout_height="wrap_content"
-android:checkedButton="@+id/rad3" 
-android:orientation="horizontal"
-android:gravity="center_vertical|center_horizontal"
->
-<RadioButton 
-android:text="day" 
-android:id="@+id/rad1"
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content">
-</RadioButton>
-<RadioButton 
-android:text="month" 
-android:id="@+id/rad2"
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content">
-</RadioButton>
-<RadioButton 
-android:text="quarter" 
-android:id="@+id/rad3"
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content">
-</RadioButton>
-<RadioButton 
-android:text="year" 
-android:id="@+id/rad4"
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content">
-</RadioButton>
-</RadioGroup>
-<LinearLayout 
-    android:layout_width="fill_parent"
-android:layout_height="wrap_content" 
-android:orientation="horizontal"
-android:gravity="center_vertical|center_horizontal"
-    >
-    <Button 
-        android:layout_marginLeft="10dp"
-android:text="confirm" 
-android:id="@+id/rad3"
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content"/>
-<Button 
-android:text="cancle" 
- android:layout_marginLeft="10dp"
-android:id="@+id/rad3"
-android:layout_width="wrap_content" 
-android:layout_height="wrap_content"/>
-    
-</LinearLayout>
+checkedButton - 指定组内被选中的单选框的 ID
+    -->
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/rad3"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/rad1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="day" >
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/rad2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="month" >
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/rad3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="quarter" >
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/rad4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="year" >
+        </RadioButton>
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/rad3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="confirm" />
+
+        <Button
+            android:id="@+id/rad3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="cancle" />
+    </LinearLayout>
 
 </LinearLayout>
-
-

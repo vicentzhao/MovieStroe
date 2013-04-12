@@ -78,13 +78,22 @@
             android:layout_below="@+id/Issuedate"
             android:textSize="28dp"
             android:text="语言：国语" />
+           <TextView
+            android:id="@+id/company"
+            android:layout_width="wrap_content"
+            android:layout_alignLeft="@+id/artist"
+            android:layout_height="wrap_content"
+                  android:layout_marginBottom="8.0dip"
+            android:layout_below="@+id/language"
+            android:textSize="28dp"
+            android:text="语言：国语" />
       <ImageView
            android:id="@+id/fengefu"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8.0dip"
             android:layout_marginTop="12.0dip"
-            android:layout_below="@+id/language"
+            android:layout_below="@+id/company"
             android:scaleType="fitXY"
             android:src="@drawable/drawable_divider" />
         <TextView
@@ -120,20 +129,13 @@
             android:layout_alignLeft="@+id/language"
             android:text="唱片公司：华纳唱片" />
 -->
- <TextView
-            android:id="@+id/company"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="46dp"
-            android:layout_alignBottom="@+id/artist"
-            android:textSize="28dp"
-            android:layout_toRightOf="@+id/Issuedate"
-            android:text="语言：国语" />
+
  <Button
             android:id="@+id/btn_order_allmusic"
             android:layout_width="wrap_content"
+              android:layout_marginLeft="46dp"
             android:layout_height="wrap_content"
-             android:layout_alignLeft="@+id/company"
+            android:layout_toRightOf="@+id/Issuedate"
             android:layout_alignBaseline="@+id/albumname"
              android:text="订阅全部"
            />

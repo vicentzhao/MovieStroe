@@ -1147,7 +1147,7 @@ public class VitamioPlayer extends Activity {
 			if (!mMediaPlayer.isPlaying()) {
 				play();
 			} else
-				Log.d(TAG, "����Ƶ�Ѿ��ڲ����ˡ�����");
+				Log.d(TAG, "无法播放，请检查");
 		}
 
 		public void stop() {

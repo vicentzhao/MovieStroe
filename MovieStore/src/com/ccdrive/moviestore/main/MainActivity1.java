@@ -73,6 +73,7 @@ import com.ccdrive.moviestore.content.Constant;
 import com.ccdrive.moviestore.http.HttpRequest;
 import com.ccdrive.moviestore.http.HttpRequest.OnHttpResponseListener;
 import com.ccdrive.moviestore.http.ImageDownloader;
+import com.ccdrive.moviestore.page.OrderPage;
 import com.ccdrive.moviestore.play.PlayerActivity;
 import com.ccdrive.moviestore.play.StreamingMediaPlayer;
 import com.ccdrive.moviestore.play.VitamioPlayer;
@@ -130,7 +131,9 @@ public class MainActivity1 extends FragmentActivity implements
 
 	static String currentPath; // 搜索判断
 
-
+	static String whatTrueOrder =""; //订阅的内容
+	
+	
 	private static int pageCount = 1;
 
 	private static boolean isSearch = false;// 判断是否为search
@@ -411,7 +414,18 @@ public class MainActivity1 extends FragmentActivity implements
 				record.setSelected(false);
 				soft.setSelected(false);
 				left_type = Constant.FLWSYS;
-			}
+			}else if (v == movie) {
+			classify.setSelected(false);
+			the_news.setSelected(false);
+			recommend.setSelected(false);
+			movie.setSelected(true);
+			teleplay.setSelected(false);
+			anime.setSelected(false);
+			// music.setSelected(false);
+			record.setSelected(false);
+			soft.setSelected(false);
+			left_type = Constant.MOVIE;
+		}
 			oLeftSelectedListener.onLeftSelected(left_type);
 		}
 
@@ -481,6 +495,9 @@ public class MainActivity1 extends FragmentActivity implements
 				} else if (isWhatRight == Constant.MUSICSTORE) {
 					setTVList(Constant.MUSICSTORE_MV+ pageCount);
 				}
+			}else if(left_type==Constant.MOVIE){
+				OrderPage  order = new OrderPage(aQuery.getContext());
+				order.setOrderPage();
 			}
 		}
 
@@ -1996,66 +2013,120 @@ public class MainActivity1 extends FragmentActivity implements
 
 	/**
 	 * subscription
-	 * 
+	 *  加入到购物车中
 	 * @param postMentList
 	 * @param id
 	 */
 	static void setOrder(final ArrayList<PostMent> postMentList, final String id) {
-		String[] myRadio = new String[postMentList.size()];
+		String[]  myRadio = new String[postMentList.size()];
 		for (int i = 0; i < postMentList.size(); i++) {
 			String type = postMentList.get(i).getType();
 			String price = postMentList.get(i).getPrice();
 			myRadio[i] = type + "/" + price;
 
 		}
-		 final View view = inflater.inflate(R.layout.orderstype, null);
-		 for (int i = 0; i <orderRadioItem.length; i++) {
-		 view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
-		 }
-		 for (int i = 0; i <postMentList.size(); i++) {
-		 view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
-		 RadioButton btn_rb=(RadioButton)
-		 view.findViewById(orderRadioItem[i]);
-		 String typeE =postMentList.get(i).getType();
-		 if(typeE.equals("day")){
-		 btn_rb.setText("day/"+postMentList.get(i).getPrice());
-		 btn_rb.setVisibility(View.VISIBLE);
-		 }
-		 if(typeE.equals("month")){
-		 btn_rb.setText("month/"+postMentList.get(i).getPrice());
-		 btn_rb.setVisibility(View.VISIBLE);
-		 }
-		 if(typeE.equals("quarter")){
-		 btn_rb.setText("quarter/"+postMentList.get(i).getPrice());
-		 btn_rb.setVisibility(View.VISIBLE);
-		 }
-		 if(typeE.equals("year")){
-		 btn_rb.setText("year/"+postMentList.get(i).getPrice());
-		 btn_rb.setVisibility(View.VISIBLE);
-		 }
-		 }
-		 final Dialog dl = new Dialog(aQuery.getContext());
-		 dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		 dl.setContentView(view);
-		 Window dialogWindow = dl.getWindow();
-		 WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-		 dialogWindow.setGravity(Gravity.CENTER);
-		 lp.width = 600;
-		 lp.height =200;
-		 dialogWindow.setAttributes(lp);
-		 dl.show();
-		 RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
-		 group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		 @Override
-		 public void onCheckedChanged(RadioGroup group, int checkedId) {
-		 // TODO Auto-generated method stub
-			 int checkedRadioButtonId = group.getCheckedRadioButtonId();
-			                   //根据ID获取RadioButton的实例
-			 RadioButton         RadioButtonrb = (RadioButton)view.findViewById(checkedRadioButtonId);
-			               System.out.println("订购的id为"+RadioButtonrb.getText());
-		
-		 }
-		 });
+
+		final View view = inflater.inflate(R.layout.orderstype, null);
+		for (int i = 0; i < orderRadioItem.length; i++) {
+			view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
+		}
+		for (int i = 0; i < postMentList.size(); i++) {
+			view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
+			RadioButton btn_rb = (RadioButton) view
+					.findViewById(orderRadioItem[i]);
+			String typeE = postMentList.get(i).getType();
+			if(i==0){
+				
+				whatTrueOrder=typeE;
+			}
+			if (typeE.equals("day")) {
+				btn_rb.setText("day/" + postMentList.get(i).getPrice());
+				btn_rb.setVisibility(View.VISIBLE);
+			}
+			if (typeE.equals("month")) {
+				btn_rb.setText("month/" + postMentList.get(i).getPrice());
+				btn_rb.setVisibility(View.VISIBLE);
+			}
+			if (typeE.equals("quarter")) {
+				btn_rb.setText("quarter/" + postMentList.get(i).getPrice());
+				btn_rb.setVisibility(View.VISIBLE);
+			}
+			if (typeE.equals("year")) {
+				btn_rb.setText("year/" + postMentList.get(i).getPrice());
+				btn_rb.setVisibility(View.VISIBLE);
+			}
+		}
+		final Dialog dl = new Dialog(aQuery.getContext());
+		dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dl.setContentView(view);
+		Window dialogWindow = dl.getWindow();
+		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+		dialogWindow.setGravity(Gravity.CENTER);
+		lp.width = 600;
+		lp.height = 200;
+		dialogWindow.setAttributes(lp);
+		dl.show();
+		RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
+		group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				// TODO Auto-generated method stub
+				int checkedRadioButtonId = group.getCheckedRadioButtonId();
+				// 根据ID获取RadioButton的实例
+				RadioButton RadioButtonrb = (RadioButton) view
+						.findViewById(checkedRadioButtonId);
+				String s = RadioButtonrb.getText().toString();
+				String whatOrder = s.substring(0, s.lastIndexOf("/"));
+				whatTrueOrder = whatOrder;
+				Toast.makeText(aQuery.getContext(), whatOrder, 1).show();
+
+			}
+		});
+		view.findViewById(R.id.btn_order_confrm).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String url = null;
+						if(isWhatLeft==Constant.MUSICCHAPTER){
+							url = HttpRequest.URL_QUERY_LIST_PAY_ALLMOVIE + id
+								+ HttpRequest.URL_ADD + whatTrueOrder;
+						}else if(isWhatLeft==Constant.MUSICMV){
+							url= HttpRequest.URL_QUERY_LIST_PAY_ALLTV + id
+									+ HttpRequest.URL_ADD + whatTrueOrder;
+						}
+						String result;
+						System.out.println("订购的地址为：===" + url);
+						try {
+							HttpGet request = new HttpGet(url);
+							// 绑定到请求 Entry
+							// 发送请求
+							HttpResponse response = new DefaultHttpClient()
+									.execute(request);
+							// 得到应答的字符串，这也是一个 JSON 格式保存的数据
+							result = EntityUtils.toString(response.getEntity());
+							Toast.makeText(aQuery.getContext(),
+									"返回的数据=============" + result, 1).show();
+							dl.dismiss();
+						} catch (Exception e) {
+							dl.dismiss();
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							Toast.makeText(aQuery.getContext(),
+									"返回的数据=============" + "Error,please try again", 1).show();
+
+						}
+
+					}
+				});
+		view.findViewById(R.id.btn_order_cancle).setOnClickListener(
+				new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						dl.dismiss();
+					}
+				});
 
 //		new AlertDialog.Builder(aQuery.getContext())
 //				.setTitle("请选择")
@@ -2068,7 +2139,7 @@ public class MainActivity1 extends FragmentActivity implements
 //								Toast.makeText(aQuery.getContext(), which + "",
 //										1).show();
 //								String type = postMentList.get(which).getType();
-//								String url = HttpRequest.URL_QUERY_LIST_PAY_ALL
+//								String url = HttpRequest.URL_QUERY_LIST_PAY_ALLMUSIC
 //										+ id + HttpRequest.URL_ADD + type;
 //								String result;
 //								System.out.println("订购的地址为：===" + url);

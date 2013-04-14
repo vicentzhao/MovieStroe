@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+     android:background="#666666"
     android:orientation="vertical" >
 
     <TextView
@@ -62,14 +63,14 @@ checkedButton - 指定组内被选中的单选框的 ID
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/rad3"
+            android:id="@+id/btn_order_confrm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="confirm" />
+            android:text="加入购物车" />
 
         <Button
-            android:id="@+id/rad3"
+            android:id="@+id/btn_order_cancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

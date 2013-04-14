@@ -106,7 +106,11 @@ public class HttpRequest {
 	public static String URL_QUERY_LIST_PAY_ID = WEB_ROOT + "index/pay.action?token=myadmin&resultType=json&num=";//根据订单号得订单id   
 	public static String URL_QUERY_LIST_PAY = WEB_ROOT + "index/pay!pay.action?token=myadmin&resultType=json&id=";//确认支付
 	public static String URL_QUERY_LIST_DELE_ORDER=WEB_ROOT+"index/order!delete.action?olid="; //删除订单
-	public static String URL_QUERY_LIST_PAY_ALL=WEB_ROOT+"index/musicshop!buy.action?token=myadmin"+"&id=";
+	public static String URL_QUERY_LIST_PAY_ALLMUSIC=WEB_ROOT+"index/musicshop!buy.action?token=myadmin"+"&id=";   //音乐订购列表,加入购物车
+	public static String URL_QUERY_LIST_PAY_ALLMOVIE=WEB_ROOT+"index/movieshop!buy.action?token=myadmin"+"&id=";   //电影订购列表，加入购物车
+	public static String URL_QUERY_LIST_PAY_ALLTV=WEB_ROOT+"index/tvplayshop!buy.action?token=myadmin"+"&id=";   //电视剧订购列表，加入购物车
+	
+	
 	public static String URL_ADD="&type=0&ordertype=";
 	public static String URL_QUERY_LIST__MOVIESORDER=WEB_ROOT+"index/movieshop!order.action?token=myadmin&resultType=json&type=1&currentPage=";//已经订阅的电影
 	public static String URL_QUERY_LIST__TVCORDERED=WEB_ROOT+"index/tvplayshop!order.action?token=myadmin&resultType=json&type=0&currentPage=";//已经订阅的mv

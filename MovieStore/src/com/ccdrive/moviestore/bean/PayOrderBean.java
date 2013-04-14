@@ -5,7 +5,25 @@ package com.ccdrive.moviestore.bean;
 public class PayOrderBean {
 	private String name;
 	private String price;
-	private String olid;
+	private String olid,num,kind,orderDate;
+	public String getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
+	public String getNum() {
+		return num;
+	}
+	public void setNum(String num) {
+		this.num = num;
+	}
+	public String getKind() {
+		return kind;
+	}
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
 	public String getName() {
 		return name;
 	}

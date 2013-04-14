@@ -144,8 +144,17 @@ public class JsonUtil {
 				bean = new PayOrderBean();
 				String name = jsonO.getString("pname");
 				String price = jsonO.getString("PRICE");
+				String num =jsonO.getString("NUM");
+				String kind=jsonO.getString("TYPE");
+				String olid =jsonO.getString("OLID");
+				String oorderDate =jsonO.getString("ORDERDATE");
+				String orderDate=oorderDate.substring(0, oorderDate.lastIndexOf(" "));
 				bean.setName(name);	  
 				bean.setPrice(price);	
+				bean.setKind(kind);
+				bean.setOlid(olid);
+				bean.setNum(num);
+				bean.setOrderDate(orderDate);
 				list.add(bean);
 			}
 		} catch (JSONException e) {

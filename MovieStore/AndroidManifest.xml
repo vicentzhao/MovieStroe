@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ccdrive.moviestore"
     android:versionCode="2"
-    android:versionName="1.1.1.6" >
+    android:versionName="1.1.1.7" >
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="11" />

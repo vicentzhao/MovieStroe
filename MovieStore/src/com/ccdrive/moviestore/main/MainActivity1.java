@@ -81,7 +81,7 @@ import com.ccdrive.moviestore.util.JsonUtil;
 import com.ccdrive.moviestore.util.UpdateVersion;
 import com.ccdrive.moviestore.util.XmlParse;
 
-public class MainActivity1 extends FragmentActivity implements
+public class MainActivity1 extends BaseActivity implements
 		LeftSelectedListener, RightSelectedListener, OnClickListener {
 
 	private static int left_type = Constant.FLFG;
@@ -133,6 +133,8 @@ public class MainActivity1 extends FragmentActivity implements
 
 	static String whatTrueOrder =""; //订阅的内容
 	
+	
+	static ProgressDialog pd;
 	
 	private static int pageCount = 1;
 
@@ -497,7 +499,8 @@ public class MainActivity1 extends FragmentActivity implements
 				}
 			}else if(left_type==Constant.MOVIE){
 				OrderPage  order = new OrderPage(aQuery.getContext());
-				order.setOrderPage();
+				String orderPathBegin =HttpRequest.URL_QUERY_LIST_ORDER+"1";
+				order.setOrderPage(orderPathBegin);
 			}
 		}
 
@@ -645,17 +648,17 @@ public class MainActivity1 extends FragmentActivity implements
 		itemView.findViewById(R.id.item_hor_05).setNextFocusRightId(
 				R.id.item_hor_06);
 		itemView.findViewById(R.id.item_hor_10).setNextFocusRightId(
-				R.id.item_hor_11);
+				R.id.page_pre);
 		itemView.findViewById(R.id.item_hor_11).setNextFocusDownId(
-				R.id.item_hor_11);
+				R.id.page_pre);
 		itemView.findViewById(R.id.item_hor_12).setNextFocusDownId(
-				R.id.item_hor_12);
+				R.id.page_pre);
 		itemView.findViewById(R.id.item_hor_13).setNextFocusDownId(
 				R.id.item_hor_13);
 		itemView.findViewById(R.id.item_hor_14).setNextFocusDownId(
-				R.id.item_hor_14);
+				R.id.page_next);
 		itemView.findViewById(R.id.item_hor_15).setNextFocusDownId(
-				R.id.item_hor_15);
+				R.id. page_next);
 
 	}
 
@@ -1087,6 +1090,12 @@ public class MainActivity1 extends FragmentActivity implements
 		}
 		final Button btn_orderall = (Button) (viewFormusicdetail
 				.findViewById(R.id.btn_order_allmusic));
+		if(isWhatRight==Constant.MYMUSIC){
+			btn_orderall.setVisibility(View.INVISIBLE);
+		}
+		else{
+			btn_orderall.setVisibility(view.VISIBLE);
+		}
 		builder.setContentView(viewFormusicdetail);
 		Window dialogWindow = builder.getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -1298,7 +1307,6 @@ public class MainActivity1 extends FragmentActivity implements
 			}
 		});
 	}
-
 	/**
 	 * setAllSoftinfo
 	 * 
@@ -1665,8 +1673,9 @@ public class MainActivity1 extends FragmentActivity implements
 				if (json != null) {
 					JSONObject jsObject;
 						try {
+							System.out.println("下载下来的json是"+json);
+							System.out.println("下载的地址为"+path);
 							jsObject = new JSONObject(json);
-						
 						JSONObject pageObject = jsObject
 								.getJSONObject("page");
 						String currentPage = pageObject
@@ -2056,6 +2065,7 @@ public class MainActivity1 extends FragmentActivity implements
 				btn_rb.setVisibility(View.VISIBLE);
 			}
 		}
+	
 		final Dialog dl = new Dialog(aQuery.getContext());
 		dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dl.setContentView(view);
@@ -2086,35 +2096,60 @@ public class MainActivity1 extends FragmentActivity implements
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						String url = null;
-						if(isWhatLeft==Constant.MUSICCHAPTER){
-							url = HttpRequest.URL_QUERY_LIST_PAY_ALLMOVIE + id
-								+ HttpRequest.URL_ADD + whatTrueOrder;
-						}else if(isWhatLeft==Constant.MUSICMV){
-							url= HttpRequest.URL_QUERY_LIST_PAY_ALLTV + id
-									+ HttpRequest.URL_ADD + whatTrueOrder;
-						}
-						String result;
-						System.out.println("订购的地址为：===" + url);
-						try {
-							HttpGet request = new HttpGet(url);
-							// 绑定到请求 Entry
-							// 发送请求
-							HttpResponse response = new DefaultHttpClient()
-									.execute(request);
-							// 得到应答的字符串，这也是一个 JSON 格式保存的数据
-							result = EntityUtils.toString(response.getEntity());
-							Toast.makeText(aQuery.getContext(),
-									"返回的数据=============" + result, 1).show();
-							dl.dismiss();
-						} catch (Exception e) {
-							dl.dismiss();
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							Toast.makeText(aQuery.getContext(),
-									"返回的数据=============" + "Error,please try again", 1).show();
+						new AsyncTask<Void, Void, String>(){
 
-						}
+							@Override
+							protected void onPostExecute(String result) {
+								pd.dismiss();
+								if(result.equals("true")){
+									Toast.makeText(aQuery.getContext(), "加入购物车成功", 1).show();
+								}else{
+									
+									Toast.makeText(aQuery.getContext(), "加入购物车失败，请重试", 1).show();
+								}
+								
+								super.onPostExecute(result);
+								
+							}
+
+							@Override
+							protected void onPreExecute() {
+								pd =new ProgressDialog(aQuery.getContext());
+								pd.show();
+								super.onPreExecute();
+							}
+							@Override
+							protected String doInBackground(Void... params) {
+								String url = null;
+								if(isWhatLeft==Constant.MUSICCHAPTER){
+									url = HttpRequest.URL_QUERY_LIST_PAY_ALLMOVIE + id
+										+ HttpRequest.URL_ADD + whatTrueOrder;
+								}else if(isWhatLeft==Constant.MUSICMV){
+									url= HttpRequest.URL_QUERY_LIST_PAY_ALLTV + id
+											+ HttpRequest.URL_ADD + whatTrueOrder;
+								}
+								String result = null;
+								System.out.println("订购的地址为：===" + url);
+								try {
+									HttpGet request = new HttpGet(url);
+									// 绑定到请求 Entry
+									// 发送请求
+									HttpResponse response = new DefaultHttpClient()
+											.execute(request);
+									// 得到应答的字符串，这也是一个 JSON 格式保存的数据
+									result = EntityUtils.toString(response.getEntity());
+									dl.dismiss();
+								} catch (Exception e) {
+									dl.dismiss();
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+
+								}
+								return result;
+							}
+							
+						}.execute();
+						
 
 					}
 				});
@@ -2127,45 +2162,6 @@ public class MainActivity1 extends FragmentActivity implements
 						dl.dismiss();
 					}
 				});
-
-//		new AlertDialog.Builder(aQuery.getContext())
-//				.setTitle("请选择")
-//				.setIcon(android.R.drawable.ic_dialog_info)
-//				.setSingleChoiceItems(myRadio, 0,
-//						new DialogInterface.OnClickListener() {
-//							public void onClick(DialogInterface dialog,
-//									int which) {
-//								dialog.dismiss();
-//								Toast.makeText(aQuery.getContext(), which + "",
-//										1).show();
-//								String type = postMentList.get(which).getType();
-//								String url = HttpRequest.URL_QUERY_LIST_PAY_ALLMUSIC
-//										+ id + HttpRequest.URL_ADD + type;
-//								String result;
-//								System.out.println("订购的地址为：===" + url);
-//								try {
-//									HttpGet request = new HttpGet(url);
-//									// 绑定到请求 Entry
-//									// 发送请求
-//									HttpResponse response = new DefaultHttpClient()
-//											.execute(request);
-//									// 得到应答的字符串，这也是一个 JSON 格式保存的数据
-//									result = EntityUtils.toString(response
-//											.getEntity());
-//									System.out.println("返回的数据============="
-//											+ result);
-//									Toast.makeText(aQuery.getContext(),
-//											"返回的数据=============" + result, 1)
-//											.show();
-//
-//								} catch (Exception e) {
-//
-//									// TODO Auto-generated catch block
-//									e.printStackTrace();
-//
-//								}
-//							}
-//						}).setNegativeButton("取消", null).show();
 	}
 
 	/**
@@ -2400,4 +2396,5 @@ public class MainActivity1 extends FragmentActivity implements
 			  }
 		  });
 	  }
+	  
 }

@@ -290,6 +290,37 @@
                 android:layout_marginBottom="10dip"
                 />
       </LinearLayout>
+        <LinearLayout 
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+          android:id="@+id/view_order_line10"
+          >
+	<TextView
+            android:id="@+id/order_pagepre"
+            style="@style/H720P_24sp_FontSize"
+            android:layout_width="fill_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/playbutton_selector"
+            android:gravity="center"
+            android:text="上一页"
+            android:textColor="@color/GridView_Item_Title" />
+         	<TextView
+            android:id="@+id/order_pagenext"
+            style="@style/H720P_24sp_FontSize"
+            android:layout_width="fill_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/playbutton_selector"
+            android:gravity="center"
+            android:text="下一页"
+            android:textColor="@color/GridView_Item_Title" />
+      </LinearLayout>
+      
        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -297,7 +328,14 @@
             android:layout_marginTop="12.0dip"
             android:scaleType="fitXY"
             android:src="@drawable/drawable_divider" />
-
+         <TextView 
+                  android:id="@+id/btn_order_totalprice" 
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:text="总计"
+                android:textSize="18dip"
+                />
    <LinearLayout 
          android:layout_width="match_parent"
          android:layout_height="match_parent"
@@ -315,7 +353,6 @@
                 android:layout_height="wrap_content"
                 android:text="取消"
                 android:textSize="18dip"
-               
                 />
       </LinearLayout></LinearLayout>
 </ScrollView>

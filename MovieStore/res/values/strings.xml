@@ -58,5 +58,9 @@
 	<string name="pleasewait">请稍后。。</string>
 	<string name="movie">电影</string>
 	
+	<string name="orderpayinfo">您要购买的数字产品价格为  ：</string>
+	<string name="paysure">确认支付</string>
+	<string name="paysuccess">付费成功</string>
+	
   	<string name="nonetwork">沒有网络</string>
 </resources>

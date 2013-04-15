@@ -101,11 +101,11 @@ public class HttpRequest {
 	public static String URL_QUERY_SINGLE_ORDER_TV = WEB_ROOT + "index/tvplayshop!singlebuy.action?token=myadmin&type=tvplay&id=";
 	public static String URL_QUERY_LIST_ORDER_RECORD = WEB_ROOT + "index/tapeshop!getworks.action?token=myadmin&resultType=json&id=";
 	public static String URL_QUERY_SINGLE_ORDER_RECORD = WEB_ROOT + "index/tapeshop!singlebuy.action?token=myadmin&type=tape&id=";
-	public static String URL_QUERY_LIST_ORDER = WEB_ROOT + "index/order.action?token=myadmin&resultType=json";//订购列表  
-	public static String URL_QUERY_LIST_ORDER_NUM = WEB_ROOT + "index/order!pay.action?resultType=json";//支付获取订单号
+	public static String URL_QUERY_LIST_ORDER = WEB_ROOT + "index/order.action?token=myadmin&pageSize=10&resultType=json&currentPage=";//订购列表  
+	public static String URL_QUERY_LIST_ORDER_NUM = WEB_ROOT + "index/order!pay.action?token=myadmin&resultType=json";//支付获取订单号
 	public static String URL_QUERY_LIST_PAY_ID = WEB_ROOT + "index/pay.action?token=myadmin&resultType=json&num=";//根据订单号得订单id   
 	public static String URL_QUERY_LIST_PAY = WEB_ROOT + "index/pay!pay.action?token=myadmin&resultType=json&id=";//确认支付
-	public static String URL_QUERY_LIST_DELE_ORDER=WEB_ROOT+"index/order!delete.action?olid="; //删除订单
+	public static String URL_QUERY_LIST_DELE_ORDER=WEB_ROOT+"index/order!delete.action?token=myadmin&resultType=json&olid="; //删除订单
 	public static String URL_QUERY_LIST_PAY_ALLMUSIC=WEB_ROOT+"index/musicshop!buy.action?token=myadmin"+"&id=";   //音乐订购列表,加入购物车
 	public static String URL_QUERY_LIST_PAY_ALLMOVIE=WEB_ROOT+"index/movieshop!buy.action?token=myadmin"+"&id=";   //电影订购列表，加入购物车
 	public static String URL_QUERY_LIST_PAY_ALLTV=WEB_ROOT+"index/tvplayshop!buy.action?token=myadmin"+"&id=";   //电视剧订购列表，加入购物车

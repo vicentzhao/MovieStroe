@@ -11,6 +11,7 @@ import android.content.Context;
 import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.bean.OrderBean;
 import com.ccdrive.moviestore.bean.PayOrderBean;
+import com.ccdrive.moviestore.bean.PostMent;
 import com.ccdrive.moviestore.bean.SoftwareBean;
 import com.ccdrive.moviestore.suffix.CryptUtil;
 
@@ -65,25 +66,85 @@ public class JsonUtil {
 		}
 		 return list; 
 	}
-	
-	public static ArrayList<SoftwareBean> getProductList(String str){
-		ArrayList<SoftwareBean> list = new ArrayList<SoftwareBean>();
+	/**
+	 * 获取单个app的信息
+	 * @param str
+	 * @return
+	 */
+	public static SoftwareBean getSoftBean(String str){
 		SoftwareBean bean = null;
+		ArrayList<PostMent> postMentList  =new ArrayList<PostMent>();
+		try {
+         JSONObject jsonO =  new JSONObject(str);
+				bean = new SoftwareBean();
+				bean.setImage_path(jsonO.getString("PIC"));
+				bean.setName(jsonO.getString("PNAME"));
+				bean.setInfo(jsonO.getString("PNOTE"));
+				bean.setId(jsonO.getString("ID"));
+				bean.setAuthor(jsonO.getString("AUTHOR"));
+				bean.setRelease(jsonO.getString("RELEASE "));
+				bean.setVersion(jsonO.getString("VERSION "));
+				bean.setEnvironment(jsonO.getString("ENVIRONMENT"));
+				JSONArray postOb = jsonO.getJSONArray("potype");
+				for (int i = 0; i < postOb.length(); i++) {
+					PostMent pm = new PostMent();
+					pm.setType(postOb.getJSONObject(i)
+							.getString("TYPE"));
+					pm.setId(postOb.getJSONObject(i).getString("PUBID"));
+					pm.setPrice(postOb.getJSONObject(i).getString(
+							"PRICE"));
+					postMentList.add(pm);
+				}
+				bean.setPostMentList(postMentList);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bean;
+	}
+	/**
+	 *  获得applist 
+	 * @param str
+	 * @return
+	 */
+	public static ArrayList<SoftwareBean> getSoftBeanList(String str){
+		SoftwareBean bean = null;
+		ArrayList<SoftwareBean> list = new ArrayList<SoftwareBean>();
+		ArrayList<PostMent> postMentList  =new ArrayList<PostMent>();
 		if(str == null)return list;
 		try {
-         JSONObject jsonObject =  new JSONObject(str);
-			
+			JSONObject jsonObject =  new JSONObject(str);
 			JSONArray jsonA = jsonObject.getJSONArray("data");
 			for(int i =0;i<jsonA.length();i++){
 				JSONObject jsonO = jsonA.getJSONObject(i);
-				bean = new SoftwareBean();
-				bean.setImage_path(jsonO.getString("PIC"));
-				bean.setName(jsonO.getString("PUBNAME"));
-				bean.setInfo(jsonO.getString("PHID"));
-				bean.setVersion(jsonO.getString("QUA"));
-				bean.setId(jsonO.getString("ID"));
-				bean.setDownload_path(jsonO.getString("ID"));
-				list.add(bean);
+			bean = new SoftwareBean();
+			bean.setImage_path(jsonO.getString("PIC"));
+			bean.setName(jsonO.getString("PNAME"));
+			if(!jsonO.isNull("PNOTE")){
+			bean.setInfo(jsonO.getString("PNOTE"));
+			}
+			if(!jsonO.isNull("NOTE")){
+				bean.setInfo(jsonO.getString("NOTE"));
+			}
+			bean.setId(jsonO.getString("ID"));
+			bean.setAuthor(jsonO.getString("AUTHOR"));
+			bean.setRelease(jsonO.getString("RELEASE"));
+			bean.setVersion(jsonO.getString("VERSION"));
+			bean.setEnvironment(jsonO.getString("ENVIRONMENT"));
+			if(!jsonO.isNull("potype")){
+			JSONArray postOb = jsonO.getJSONArray("potype");
+			for (int j = 0; j < postOb.length(); j++) {
+				PostMent pm = new PostMent();
+				pm.setType(postOb.getJSONObject(i)
+						.getString("TYPE"));
+				pm.setId(postOb.getJSONObject(i).getString("PUBID"));
+				pm.setPrice(postOb.getJSONObject(i).getString(
+						"PRICE"));
+				postMentList.add(pm);
+			}
+			bean.setPostMentList(postMentList);
+			}
+			list.add(bean);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -91,6 +152,7 @@ public class JsonUtil {
 		}
 		return list;
 	}
+	
 	
 	public static ArrayList<OrderBean> getOrderList(String str){
 		ArrayList<OrderBean> list = new ArrayList<OrderBean>();
@@ -131,6 +193,8 @@ public class JsonUtil {
 		}
 		return result;
 	}
+	
+	//获得要支付的订单的信息
 	
 	public static ArrayList<PayOrderBean> getOrderNum(String str){
 		ArrayList<PayOrderBean> list = new ArrayList<PayOrderBean>();

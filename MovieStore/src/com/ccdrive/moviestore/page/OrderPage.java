@@ -301,10 +301,7 @@ public class OrderPage {
 				return null;
 			}
 	  } 
-	  
 	  private  void setOrderPageInfo(final ArrayList<PayOrderBean> orderNumList,final View orderPageView){
-		  
-
 			for (int i = 0; i < orderNumList.size(); i++) {
 				orderPageView.findViewById(lineItems[i]).setVisibility(View.VISIBLE);
 			TextView ductText=	(TextView) orderPageView.findViewById(orderInfoItems[i]).findViewById(R.id.order_duct);
@@ -314,7 +311,16 @@ public class OrderPage {
 			TextView priceText=	(TextView) orderPageView.findViewById(orderInfoItems[i]).findViewById(R.id.order_price);
 			priceText.setText(orderNumList.get(i).getPrice());
 			TextView kindText=	(TextView) orderPageView.findViewById(orderInfoItems[i]).findViewById(R.id.order_kind);
-			kindText.setText(orderNumList.get(i).getKind());
+			String kind = orderNumList.get(i).getKind();
+			if(kind.equals("tvplay")){
+				kindText.setText(aQuery.getContext().getResources().getString(R.string.order_kind_tv));
+			}
+			if(kind.equals("music")){
+				kindText.setText(aQuery.getContext().getResources().getString(R.string.order_kind_music));
+			}
+			if(kind.equals("movie")){
+				kindText.setText(aQuery.getContext().getResources().getString(R.string.order_kind_movie));
+			}
 			TextView dateText=	(TextView) orderPageView.findViewById(orderInfoItems[i]).findViewById(R.id.order_date);
 			dateText.setText(orderNumList.get(i).getOrderDate());
 			orderPageView.findViewById(deleItems[i]).setOnClickListener(new OnClickListener() {

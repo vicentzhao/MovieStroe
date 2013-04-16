@@ -1,6 +1,6 @@
 package com.ccdrive.moviestore.bean;
 /*
- * ֧���б�bean
+ * ֧ 需要支付订单的信息
  */
 public class PayOrderBean {
 	private String name;

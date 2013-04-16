@@ -1,5 +1,7 @@
 package com.ccdrive.moviestore.bean;
 
+import java.util.ArrayList;
+
 public class SoftwareBean {
 	private String name;
 	private String info;
@@ -9,7 +11,15 @@ public class SoftwareBean {
 	private String id;
 	private String author, release, //发布日期
 	environment;
+	private ArrayList<PostMent> postMentList;
 	
+	
+	public ArrayList<PostMent> getPostMentList() {
+		return postMentList;
+	}
+	public void setPostMentList(ArrayList<PostMent> postMentList) {
+		this.postMentList = postMentList;
+	}
 	public String getAuthor() {
 		return author;
 	}

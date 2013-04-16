@@ -62,5 +62,9 @@
 	<string name="paysure">确认支付</string>
 	<string name="paysuccess">付费成功</string>
 	
+	<string name="order_kind_tv">电视剧</string>
+	<string name="order_kind_movie">电影</string>
+	<string name="order_kind_music">音乐</string>
+	<string  name="order_kind_app">软件</string>
   	<string name="nonetwork">沒有网络</string>
 </resources>

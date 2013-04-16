@@ -1366,7 +1366,7 @@ public class MainActivity1 extends BaseActivity implements
 								TextView tv = (TextView) (itemView.findViewById(R.id.field_page_index));
 								tv.setText("第" + page.getCurrentPage() + "页"+"/"+"总"+page.getTotalPage()+"页");
 								musicAppList = new ArrayList<SoftwareBean>();
-								musicAppList = JsonUtil.getProductList(json);
+								musicAppList = JsonUtil.getSoftBeanList(json);
 								if (musicAppList.size() != 0) {
 									setSoftInfo(musicAppList, path);
 									

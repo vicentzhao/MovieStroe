@@ -320,7 +320,6 @@
             android:text="下一页"
             android:textColor="@color/GridView_Item_Title" />
       </LinearLayout>
-      
        <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

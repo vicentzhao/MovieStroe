@@ -82,9 +82,10 @@ public class JsonUtil {
 				bean.setInfo(jsonO.getString("PNOTE"));
 				bean.setId(jsonO.getString("ID"));
 				bean.setAuthor(jsonO.getString("AUTHOR"));
-				bean.setRelease(jsonO.getString("RELEASE "));
-				bean.setVersion(jsonO.getString("VERSION "));
+				bean.setRelease(jsonO.getString("RELEASE"));
+				bean.setVersion(jsonO.getString("VERSION"));
 				bean.setEnvironment(jsonO.getString("ENVIRONMENT"));
+				bean.setAddDate(jsonO.getString("ADDTIME"));
 				JSONArray postOb = jsonO.getJSONArray("potype");
 				for (int i = 0; i < postOb.length(); i++) {
 					PostMent pm = new PostMent();
@@ -126,6 +127,7 @@ public class JsonUtil {
 			if(!jsonO.isNull("NOTE")){
 				bean.setInfo(jsonO.getString("NOTE"));
 			}
+			bean.setAddDate(jsonO.getString("ADDTIME"));
 			bean.setId(jsonO.getString("ID"));
 			bean.setAuthor(jsonO.getString("AUTHOR"));
 			bean.setRelease(jsonO.getString("RELEASE"));

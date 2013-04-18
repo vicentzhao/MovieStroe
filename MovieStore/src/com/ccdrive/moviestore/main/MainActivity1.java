@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -35,6 +36,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -77,11 +79,12 @@ import com.ccdrive.moviestore.page.OrderPage;
 import com.ccdrive.moviestore.play.PlayerActivity;
 import com.ccdrive.moviestore.play.StreamingMediaPlayer;
 import com.ccdrive.moviestore.play.VitamioPlayer;
+import com.ccdrive.moviestore.util.AppUtil;
 import com.ccdrive.moviestore.util.JsonUtil;
 import com.ccdrive.moviestore.util.UpdateVersion;
 import com.ccdrive.moviestore.util.XmlParse;
 
-public class MainActivity1 extends BaseActivity implements
+public class MainActivity1 extends FragmentActivity implements
 		LeftSelectedListener, RightSelectedListener, OnClickListener {
 
 	private static int left_type = Constant.FLFG;
@@ -133,6 +136,10 @@ public class MainActivity1 extends BaseActivity implements
 
 	static String whatTrueOrder =""; //订阅的内容
 	
+	//设备的宽高
+	private static int DeviceWidth ;
+	private static int DeviceHeight;
+	
 	
 	static ProgressDialog pd;
 	
@@ -144,6 +151,8 @@ public class MainActivity1 extends BaseActivity implements
 	private static PagenationBean page = new PagenationBean();
 	private EditText searchContentEdit;
 	
+	
+	//
 	
 	private static Button classify, the_news, recommend, movie, teleplay,
 			anime, softInstallButton, music, record, soft;
@@ -197,6 +206,7 @@ public class MainActivity1 extends BaseActivity implements
 		sp = getPreferences(MODE_PRIVATE);
 		aQuery = new AQuery(MainActivity1.this);
 		initView();
+		setParams();
 		editor = sp.edit();
 		checkVersion();
 	}
@@ -296,7 +306,7 @@ public class MainActivity1 extends BaseActivity implements
 	}
 
 	// 左侧栏碎片
-	public static class LeftFragment extends Fragment implements
+	public  static class LeftFragment extends Fragment implements
 			OnClickListener {
 		OnLeftSelectedListener oLeftSelectedListener;
 		View view;
@@ -732,8 +742,8 @@ public class MainActivity1 extends BaseActivity implements
 		Window dialogWindow = builder.getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = 800;
-		lp.height = 640;
+		lp.width = DeviceWidth;
+		lp.height = DeviceHeight;
 		dialogWindow.setAttributes(lp);
 	}
 
@@ -809,6 +819,11 @@ public class MainActivity1 extends BaseActivity implements
 			SoftwareBean sb = list.get(i);
 			final String name = list.get(i).getName();
 			final String path_root = list.get(i).getDownload_path();
+			final String author = list.get(i).getAuthor();
+			final String release = list.get(i).getRelease();
+			final String addDate =list.get(i).getAddDate();
+			final String version =list.get(i).getVersion();
+			final String evenment=list.get(i).getEnvironment();
 			String image_path = sb.getImage_path();
 			final String title = sb.getName();
 			String turePath = HttpRequest.URL_QUERY_SINGLE_IMAGE + image_path;
@@ -833,6 +848,20 @@ public class MainActivity1 extends BaseActivity implements
 							ImageDownloader downloader = new ImageDownloader(
 									aQuery.getContext());
 							downloader.download(path, imageView);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.appname)).setText(name);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.title_text)).setText(name);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.appcompany)).setText(aQuery.getContext().getResources().getString(R.string.soft_company)+author);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.Issuedate)).setText(aQuery.getContext().getResources().getString(R.string.soft_addDate)+addDate);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.versions)).setText(aQuery.getContext().getResources().getString(R.string.soft_version)+version);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.publishdate)).setText(aQuery.getContext().getResources().getString(R.string.soft_reledate)+release);
+							((TextView) viewForsoftDetail
+									.findViewById(R.id.platform)).setText(aQuery.getContext().getResources().getString(R.string.soft_evenment)+evenment);
 						}
 					});
 		}
@@ -959,7 +988,7 @@ public class MainActivity1 extends BaseActivity implements
 		Window dialogWindow = builder.getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = 800;
+		lp.width = 1000;
 		lp.height = 640;
 		dialogWindow.setAttributes(lp);
 		Dialog.show();
@@ -1036,25 +1065,46 @@ public class MainActivity1 extends BaseActivity implements
 					System.out.println("下载的数据" + "====" + json);
 					final String image_path_boot;
 					try {
-						final ArrayList<String> pathList = new ArrayList<String>();
-						ArrayList<String> nameList = new ArrayList<String>();
-						JSONObject jb = new JSONObject(json);
-						image_path_boot = jb.getString("PIC");
-						String name = jb.getString("PNAME");
+						SoftwareBean softBean = JsonUtil.getSoftBean(json);
+						AppUtil appUtil = new AppUtil(aQuery.getContext());
+						 boolean install = appUtil.isInstall(softBean.getName());
+						 if(install){
+							 viewForsoftDetail
+								.findViewById(R.id.uninstall).setVisibility(View.VISIBLE);
+							 viewForsoftDetail
+							 .findViewById(R.id.uninstall).setFocusable(false);
+							 viewForsoftDetail
+								.findViewById(R.id.install).setVisibility(View.GONE);
+						 }else{
+							 viewForsoftDetail
+								.findViewById(R.id.uninstall).setVisibility(View.GONE);
+							 viewForsoftDetail
+								.findViewById(R.id.install).setVisibility(View.VISIBLE);
+						 }
 						builder.show();
 						((TextView) viewForsoftDetail
-								.findViewById(R.id.appname)).setText(name);
+								.findViewById(R.id.appname)).setText(softBean.getName());
 						((TextView) viewForsoftDetail
-								.findViewById(R.id.title_text)).setText(name);
+								.findViewById(R.id.title_text)).setText(softBean.getName());
+						((TextView) viewForsoftDetail
+								.findViewById(R.id.appcompany)).setText(aQuery.getContext().getResources().getString(R.string.soft_company)+softBean.getAuthor());
+						((TextView) viewForsoftDetail
+								.findViewById(R.id.Issuedate)).setText(aQuery.getContext().getResources().getString(R.string.soft_addDate)+softBean.getRelease());
+						((TextView) viewForsoftDetail
+								.findViewById(R.id.versions)).setText(aQuery.getContext().getResources().getString(R.string.soft_version)+softBean.getVersion());
+						((TextView) viewForsoftDetail
+								.findViewById(R.id.publishdate)).setText(aQuery.getContext().getResources().getString(R.string.soft_reledate)+softBean.getRelease());
+						((TextView) viewForsoftDetail
+								.findViewById(R.id.platform)).setText(aQuery.getContext().getResources().getString(R.string.soft_evenment)+softBean.getEnvironment());
 						setSoftrecommend(list, viewForsoftDetail);
 						String path = HttpRequest.URL_QUERY_SINGLE_IMAGE
-								+ image_path_boot;
+								+ softBean.getImage_path();
 						ImageView imageView = (ImageView) viewForsoftDetail
 								.findViewById(R.id.appimage);
 						ImageDownloader downloader = new ImageDownloader(aQuery
 								.getContext());
 						downloader.download(path, imageView);
-					} catch (JSONException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					Dialog.dismiss();
@@ -1100,8 +1150,8 @@ public class MainActivity1 extends BaseActivity implements
 		Window dialogWindow = builder.getWindow();
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = 1000;
-		lp.height = 640;
+		lp.width = DeviceWidth;
+		lp.height = DeviceHeight;
 		dialogWindow.setAttributes(lp);
 		if(isWhatLeft==Constant.MUSICCHAPTER){
 		for (int i = 0; i < tvlistItem.length; i++) {
@@ -1425,7 +1475,7 @@ public class MainActivity1 extends BaseActivity implements
 						}
 					});
 		}
-	};
+	}
 
 	// default UI
 
@@ -2073,7 +2123,7 @@ public class MainActivity1 extends BaseActivity implements
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		dialogWindow.setGravity(Gravity.CENTER);
 		lp.width = 600;
-		lp.height = 200;
+		lp.height = 400;
 		dialogWindow.setAttributes(lp);
 		dl.show();
 		RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
@@ -2396,5 +2446,16 @@ public class MainActivity1 extends BaseActivity implements
 			  }
 		  });
 	  }
-	  
+	  /**
+	   * 获得屏幕的宽高
+	   */
+	  private void setParams() {
+		  DisplayMetrics dm = new DisplayMetrics();
+		  getWindowManager().getDefaultDisplay().getMetrics(dm);
+		  Rect rect = new Rect();
+		  View view = getWindow().getDecorView();
+		  view.getWindowVisibleDisplayFrame(rect);
+		  DeviceHeight = dm.heightPixels - rect.top;
+		  DeviceWidth = dm.widthPixels;
+		 }
 }

@@ -1,18 +1,17 @@
 package com.ccdrive.moviestore.util;
 
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxCallback;
-import com.androidquery.callback.AjaxStatus;
-import com.ccdrive.moviestore.http.HttpRequest;
-import com.ccdrive.moviestore.main.LoginActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.widget.Toast;
 
-public class OtherUtil {
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+import com.ccdrive.moviestore.http.HttpRequest;
+
+public class LoginUtil {
 	  private String macAddress;
 	  private Context mContext;
 	  private SharedPreferences sharedPreferences;
@@ -21,7 +20,7 @@ public class OtherUtil {
 	  private String driveid;
 	  private boolean isLogin;
 	  
-	 public OtherUtil(Context mContext) {
+	 public LoginUtil(Context mContext) {
 		 this.mContext = mContext;
 	  }
      public boolean CheckUerInfo(){

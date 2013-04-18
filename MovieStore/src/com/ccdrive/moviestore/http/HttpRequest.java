@@ -41,8 +41,8 @@ import android.util.Log;
 
 public class HttpRequest {
      
-//	public static  String WEB_ROOT = "http://124.193.177.154:9007/";  
-	public static  String WEB_ROOT ="http://192.168.1.32:8080/";  
+	public static  String WEB_ROOT = "http://124.193.177.154:9007/";  
+//	public static  String WEB_ROOT ="http://192.168.1.32:8080/";  
 //	http://124.193.177.154:9007/index/softshop!getFile.action?token=myadmin&sid=135909554233700001&type=music
 //	http://192.168.1.32:8080
 //	public static  String WEB_ROOT = "http://42.121.6.154/";

@@ -67,4 +67,13 @@
 	<string name="order_kind_music">音乐</string>
 	<string  name="order_kind_app">软件</string>
   	<string name="nonetwork">沒有网络</string>
+  	
+  	<!-- 
+  	     soft的一些标题
+  	 -->
+  	 <string  name ="soft_company">公司  ： </string>
+  	 <string  name="soft_addDate">添加日期  ：</string>
+  	 <string  name="soft_version">1.【版本】  </string>
+  	 <string name="soft_reledate">2.【发布日期】 </string>
+  	 <string name="soft_evenment">3.【应用平台】 </string>
 </resources>

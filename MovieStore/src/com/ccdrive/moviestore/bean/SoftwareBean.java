@@ -10,7 +10,13 @@ public class SoftwareBean {
 	private String download_path;
 	private String id;
 	private String author, release, //发布日期
-	environment;
+	environment,addDate;
+	public String getAddDate() {
+		return addDate;
+	}
+	public void setAddDate(String addDate) {
+		this.addDate = addDate;
+	}
 	private ArrayList<PostMent> postMentList;
 	
 	

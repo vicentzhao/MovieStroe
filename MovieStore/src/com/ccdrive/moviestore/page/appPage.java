@@ -39,5 +39,6 @@ public class appPage {
 			dialogWindow.setAttributes(lp);
 			builder.show();
 	}
+	
 
 }

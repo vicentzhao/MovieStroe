@@ -44,13 +44,11 @@
 	    	
 	    	 <color name="bg">#80000000</color>
     <color name="level">#1111FF</color>
-    <color name="white">#ffffff</color>
     <color name="controller_bg">#80006454</color>
     <color name="province_bg">#b4000000</color>
     <color name="dialog_progress">#AAFF00</color>
     <color name="dialog_msg">#00AAFF</color>
     <color name="Color_verificationCode">#FF0000</color>
-    <color name="green">#00FF00</color>
     <color name="grey">#80abaaaa</color>
     
     

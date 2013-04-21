@@ -75,6 +75,7 @@ import com.ccdrive.moviestore.content.Constant;
 import com.ccdrive.moviestore.http.HttpRequest;
 import com.ccdrive.moviestore.http.HttpRequest.OnHttpResponseListener;
 import com.ccdrive.moviestore.http.ImageDownloader;
+import com.ccdrive.moviestore.page.MoviesDetailActivity;
 import com.ccdrive.moviestore.page.OrderPage;
 import com.ccdrive.moviestore.play.PlayerActivity;
 import com.ccdrive.moviestore.play.StreamingMediaPlayer;
@@ -181,11 +182,6 @@ public class MainActivity1 extends FragmentActivity implements
 		R.id.i_text_episode_text6, R.id.i_text_episode_text7,
 		R.id.i_text_episode_text8, R.id.i_text_episode_text9,
 		R.id.i_text_episode_text10 };
-	// private static int[] recommendItem =
-	// {R.id.music1,R.id.music2,R.id.music3,
-	// R.id.music4,R.id.music5,R.id.music6,
-	// R.id.music7,R.id.music8,R.id.music9,
-	// R.id.music10};
 	private static int[] orderRadioItem = { R.id.rad1, R.id.rad2, R.id.rad3,
 			R.id.rad4 };
 
@@ -206,7 +202,6 @@ public class MainActivity1 extends FragmentActivity implements
 		sp = getPreferences(MODE_PRIVATE);
 		aQuery = new AQuery(MainActivity1.this);
 		initView();
-		setParams();
 		editor = sp.edit();
 		checkVersion();
 	}
@@ -664,68 +659,13 @@ public class MainActivity1 extends FragmentActivity implements
 		itemView.findViewById(R.id.item_hor_12).setNextFocusDownId(
 				R.id.page_pre);
 		itemView.findViewById(R.id.item_hor_13).setNextFocusDownId(
-				R.id.item_hor_13);
+				R.id.page_pre);
 		itemView.findViewById(R.id.item_hor_14).setNextFocusDownId(
 				R.id.page_next);
 		itemView.findViewById(R.id.item_hor_15).setNextFocusDownId(
 				R.id. page_next);
 
 	}
-
-	// public void initItems(int[] itemIds) {
-	// // AQuery aq = new AQuery(contentView);
-	// for(int i=0;i<itemIds.length;i++){
-	// aq.find(itemIds[i]).clicked(new OnClickListener() {
-	//
-	// @Override
-	// public void onClick(View v) {
-	// MovieBrief movie = (MovieBrief) v.getTag();
-	// Intent i = new Intent(context,ItemDetailPage.class);
-	// i.putExtra("id",movie.getId());
-	// context.startActivity(i);
-	// }
-	// }).focusChanged(new OnFocusChangeListener() {
-	//
-	// @Override
-	// public void onFocusChange(View v, boolean hasFocus) {
-	// if(hasFocus){
-	// focusViewId = v.getId();
-	// MovieBrief movie = (MovieBrief) v.getTag();
-	// updateInfomation(movie);
-	// }
-	// }
-	// }).invisible();
-	// }
-	// aq.find(itemIds[0]).keyed(new OnKeyListener() {
-	//
-	// @Override
-	// public boolean onKey(View v, int keyCode, KeyEvent event) {
-	// if( event.getAction() == KeyEvent.ACTION_DOWN){
-	// if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
-	// if(!loading)
-	// prePage();
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-	// });
-	// aq.find(itemIds[itemIds.length-1]).keyed(new OnKeyListener() {
-	//
-	// @Override
-	// public boolean onKey(View v, int keyCode, KeyEvent event) {
-	// if( event.getAction() == KeyEvent.ACTION_DOWN){
-	//
-	// if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
-	// if(!loading)
-	// nextPage();
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-	// });
-	// }
 	public static void initDialog(String s) {
 
 		View view = null;
@@ -867,106 +807,6 @@ public class MainActivity1 extends FragmentActivity implements
 		}
 	}
 
-	// 音乐推荐
-	private static void setMusicrecommend(ArrayList<Movie> list, final View view,final int iswhat) {
-		final ArrayList<String> myPathlist = new ArrayList<String>();
-		ImageDownloader Downloader = new ImageDownloader(aQuery.getContext());
-		for (int i = 0; i < 5; i++) {
-			view.findViewById(horItems[i]).setVisibility(View.VISIBLE);
-		}
-		int j = 0;
-		if (list.size() < 5) {
-			for (int s = 0; s < 5 - list.size(); s++) {
-				view.findViewById(horItems[4 - s])
-						.setVisibility(View.INVISIBLE);
-			}
-		}
-		for (int i = 0; i < ((list.size() <= 5) ? list.size() : 5); i++) {
-			final Movie sb = list.get(i);
-			String image_path = sb.getImage_path();
-			final String title = sb.getName();
-			final String turePath = HttpRequest.URL_QUERY_SINGLE_IMAGE
-					+ image_path;
-			Downloader.download(
-					turePath,
-					((ImageView) view.findViewById(horItems[i]).findViewById(
-							R.id.ItemIcon)));
-			((TextView) view.findViewById(horItems[i]).findViewById(
-					R.id.ItemTitle)).setText(title);
-			myPathlist.add(image_path);
-			view.findViewById(horItems[i]).setOnClickListener(
-					new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							((TextView) view.findViewById(R.id.albumname))
-									.setText(title);
-							ImageView imageView = (ImageView) view
-									.findViewById(R.id.albumimage);
-							ImageDownloader downloader = new ImageDownloader(
-									aQuery.getContext());
-							downloader.download(turePath, imageView);
-							setRecommedMusicInfo(sb.getId(), view, sb,iswhat);
-						}
-					});
-		}
-	}
-
-	/**
-	 * 试播,订购，下载 set music play
-	 * 
-	 * @param path
-	 */
-	// public static void setMusicCross(final String path,final String sid){
-	// Log.e(TAG, "下载的路径是"+path);
-	// String decryptURL = CryptUtil.decryptURL(path);
-	// final String subpath =
-	// decryptURL.substring(decryptURL.lastIndexOf(".")+1,
-	// decryptURL.length()-1);
-	// final View musiccrossView = inflater.inflate(R.layout.musiccross, null);
-	// final Dialog dl = new Dialog(aQuery.getContext());
-	// dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	// dl.setContentView(musiccrossView);
-	// Window dialogWindow = dl.getWindow();
-	// WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-	// dialogWindow.setGravity(Gravity.CENTER);
-	// lp.width = 400;
-	// lp.height =200;
-	// dialogWindow.setAttributes(lp);
-	// dl.show();
-	// //试播
-	// ((Button)musiccrossView.findViewById(R.id.btn_shibo)).setOnClickListener(new
-	// OnClickListener() {
-	// @Override
-	// public void onClick(View v) {
-	// // TODO Auto-generated method stub
-	// if("mp3".equals(subpath)){
-	// setMusicPilot(path);
-	// }else if("mp4".equals(subpath)){
-	// setMVPilot(path);
-	// }
-	// // setMusicPilot(path);
-	// }
-	// });
-	// //下载
-	// ((Button)musiccrossView.findViewById(R.id.btn_musicdown)).setOnClickListener(new
-	// OnClickListener() {
-	// @Override
-	// public void onClick(View v) {
-	// // TODO Auto-generated method stub
-	// setMusicDown(sid);
-	// }
-	// });
-	// //订阅单曲
-	// ((Button)musiccrossView.findViewById(R.id.btn_musciorder)).setOnClickListener(new
-	// OnClickListener() {
-	// @Override
-	// public void onClick(View v) {
-	// // TODO Auto-generated method stub
-	// //setMusicPilot(path);
-	// }
-	// });
-	//
-	// }
 	/**
 	 * setSoftDetial param 软件详细界面
 	 */
@@ -1128,236 +968,6 @@ public class MainActivity1 extends FragmentActivity implements
 	};
 
 	/**
-	 * setMusicDetial param 音乐详细界面
-	 */
-	public static void setMusicDetial(int id, final ArrayList<Movie> list,
-			final View view, final String orderId, final int bo) {
-		int j = 0;
-		for (int i = 0; i < horItems.length; i++) {
-			if (id == horItems[i]) {
-				j = i;
-			}
-		}
-		final Button btn_orderall = (Button) (viewFormusicdetail
-				.findViewById(R.id.btn_order_allmusic));
-		if(isWhatRight==Constant.MYMUSIC){
-			btn_orderall.setVisibility(View.INVISIBLE);
-		}
-		else{
-			btn_orderall.setVisibility(view.VISIBLE);
-		}
-		builder.setContentView(viewFormusicdetail);
-		Window dialogWindow = builder.getWindow();
-		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = DeviceWidth;
-		lp.height = DeviceHeight;
-		dialogWindow.setAttributes(lp);
-		if(isWhatLeft==Constant.MUSICCHAPTER){
-		for (int i = 0; i < tvlistItem.length; i++) {
-			view.findViewById(tvlistItem[i]).setVisibility(View.GONE);
-			TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-			tv.setWidth(LayoutParams.WRAP_CONTENT);
-		}
-		}else{
-			for (int i = 0; i < tvlistItem.length; i++) {
-				view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
-			}
-		}
-		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
-				"缓冲中。。", "正在缓冲请稍后。。");
-		ProDiaglogDimiss(Dialog);
-		String web_url ="";
-		final String musicId = list.get(j).getId();
-		if(bo==isFilm){
-			web_url= HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
-		}else if(bo==isTv){
-			web_url=HttpRequest.URL_QUERY_LIST_TV+musicId;
-		}
-		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {// 这里的函数是一个内嵌函数如果是函数体比较复杂的话这种方法就不太合适了
-					@Override
-					public void callback(String url, String json,
-							AjaxStatus status) {
-						if (json != null) {
-							ArrayList<Movie> musicDetialList = new ArrayList<Movie>();
-							System.out.println("下载的数据" + "====" + json);
-							Dialog.dismiss();
-							try {
-								JSONArray ja = new JSONArray(json);
-								for (int i = 0; i < ja.length(); i++) {
-									Movie music = new Movie();
-									JSONObject jb = ja.getJSONObject(i);
-									String sid = jb.getString("sid");
-									String musicpath = jb.getString("filepath");
-									String title = jb.getString("title");
-									String seq = null;
-									if(!jb.isNull("seq")){
-									seq =jb.getString("seq");
-									}
-									music.setSeq(seq);
-									music.setDownload_path(musicpath);
-									music.setId(sid);
-									music.setName(title);
-									musicDetialList.add(music);
-									
-								}
-
-								// MusicAdapter myMusicAdapter = new
-								// MusicAdapter(aQuery.getContext(),
-								// musicDetialList,isWhatRight);
-								// listview.setAdapter(myMusicAdapter);
-								int temp = 0;//级数常量
-								for (int i = 0; i < musicDetialList.size(); i++) {
-									final Movie music =musicDetialList.get(i);
-									if(isWhatLeft==Constant.MUSICCHAPTER){
-									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-									tv.setWidth(LayoutParams.WRAP_CONTENT);
-									tv.setVisibility(View.VISIBLE);
-									tv.setText(music.getName());
-									}else{
-										String seq = music.getSeq();
-										if(seq.length()!=0){
-											TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-											tv.setWidth(LayoutParams.WRAP_CONTENT);
-											view.findViewById(tvlistItem[i])
-													.setVisibility(View.VISIBLE);
-											tv.setText(seq);
-											temp =Integer.parseInt(seq);
-										}else{
-											TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-											tv.setWidth(LayoutParams.WRAP_CONTENT);
-											view.findViewById(tvlistItem[i])
-													.setVisibility(View.VISIBLE);
-											temp =temp+1;
-											tv.setText(temp+"");
-										}
-									}
-									view.findViewById(tvlistItem[i])
-											.setOnClickListener(
-													new OnClickListener() {
-														@Override
-														public void onClick(
-																View v) {
-																setMVPilot(music);
-														}
-													});
-								}
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-						} else {
-							Dialog.dismiss();
-							Toast.makeText(aQuery.getContext(),
-									"Error:" + status.getCode(),
-									Toast.LENGTH_LONG).show();
-						}
-					}
-				});
-		String musicssPath ="";
-		if(bo==isFilm){
-			musicssPath= HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
-		}else if(bo==isTv){
-			musicssPath=HttpRequest.URL_QUERY_SINGLE_TV+musicId;
-		}
-		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
-			@Override
-			public void callback(String url, String json, AjaxStatus status) {
-				if (json != null) {
-					System.out.println("下载的数据" + "=======" + json);
-					final String image_path_boot;
-					try {
-						final ArrayList<String> pathList = new ArrayList<String>();
-						ArrayList<String> nameList = new ArrayList<String>();
-						final ArrayList<PostMent> postMentList = new ArrayList<PostMent>();
-						JSONObject jb = new JSONObject(json);
-						image_path_boot = jb.getString("PIC");
-						String name = jb.getString("PNAME");
-						String note = jb.getString("PNOTE");
-						String director = "";
-						String kind = "";
-						String rose = "";
-						String pubdate = "";
-						if (!jb.isNull("DIRECTOR")) {
-							director = jb.getString("DIRECTOR");
-						}
-						if (!jb.isNull("KIND")) {
-							kind = jb.getString("KIND");
-						}
-						if (!jb.isNull("ROSE")) {
-							rose = jb.getString("ROSE");
-						}
-						if (!jb.isNull("RELEASE")) {
-						String 	mypubdate = jb.getString("RELEASE");
-						pubdate =mypubdate.substring(0, mypubdate.lastIndexOf(" "));
-						   
-						}
-						JSONArray postOb = jb.getJSONArray("potype");
-						for (int i = 0; i < postOb.length(); i++) {
-
-							PostMent pm = new PostMent();
-							pm.setType(postOb.getJSONObject(i)
-									.getString("TYPE"));
-							pm.setId(postOb.getJSONObject(i).getString("PUBID"));
-							pm.setPrice(postOb.getJSONObject(i).getString(
-									"PRICE"));
-							postMentList.add(pm);
-						}
-						btn_orderall.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								setOrder(postMentList, orderId);
-							}
-						});
-						builder.show();
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.musicdetail_text))
-								.setText(name);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.albumname)).setText(name);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.albuminfo)).setText(note);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.artist)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.director)
-								+ " : " + director);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.Issuedate)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.pubdate)
-								+ " ： " + pubdate);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.language)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.rose)
-								+ " ： " + rose);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.company)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.kind)
-								+ " ： " + kind);
-						setMusicrecommend(list, viewFormusicdetail,bo);
-						String path = HttpRequest.URL_QUERY_SINGLE_IMAGE
-								+ image_path_boot;
-						ImageView imageView = (ImageView) viewFormusicdetail
-								.findViewById(R.id.albumimage);
-						ImageDownloader downloader = new ImageDownloader(aQuery
-								.getContext());
-						downloader.download(path, imageView);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					Dialog.dismiss();
-				} else {
-					Dialog.dismiss();
-					Toast.makeText(aQuery.getContext(),
-							"Error:" + status.getCode(), Toast.LENGTH_LONG)
-							.show();
-				}
-			}
-		});
-	}
-	/**
 	 * setAllSoftinfo
 	 * 
 	 * @param softList
@@ -1482,153 +1092,6 @@ public class MainActivity1 extends FragmentActivity implements
 	public static void setDefalutView() {
 		isWhatRight = Constant.MYMUSIC;
 		setAppStoreList(Constant.MYMUSIC_APP + pageCount);
-	}
-
-	// set pilot play UI
-//	public static void setMusicPilot(final String path, View v1, int viewid) {
-//
-//		v1.setOnKeyListener(new OnKeyListener() {
-//
-//			@Override
-//			public boolean onKey(View v, int keyCode, KeyEvent event) {
-//				if (keyCode == KeyEvent.KEYCODE_BACK) {
-//					if (audioStreamer != null) {
-//						if (audioStreamer.getMediaPlayer() != null) {
-//							audioStreamer.getMediaPlayer().stop();
-//						}
-//					}
-//				}
-//				return false;
-//			}
-//		});
-//		try {
-//			if (whatisplay == 1) {
-//				whatisplay = viewid;
-//				final SeekBar progressBar = (SeekBar) (v1.findViewById(viewid)
-//						.findViewById(R.id.progress_bar));
-//				progressBar.setVisibility(View.VISIBLE);
-//				final TextView playTime = (TextView) (v1.findViewById(viewid)
-//						.findViewById(R.id.playTime));
-//				audioStreamer = new StreamingMediaPlayer(aQuery.getContext(),
-//						progressBar, playTime);
-//				audioStreamer.startStreaming(path);
-//			} else if (whatisplay == viewid) {
-//				whatisplay = viewid;
-//				if (audioStreamer.getMediaPlayer().isPlaying()) {
-//					audioStreamer.getMediaPlayer().pause();
-//				} else if (!audioStreamer.getMediaPlayer().isPlaying()) {
-//					audioStreamer.getMediaPlayer().start();
-//					audioStreamer.startPlayProgressUpdater();
-//				}
-//			} else if (whatisplay != viewid) {
-//				final SeekBar progressBarold = (SeekBar) (v1
-//						.findViewById(whatisplay)
-//						.findViewById(R.id.progress_bar));
-//				progressBarold.setVisibility(View.INVISIBLE);
-//				whatisplay = viewid;
-//				if (audioStreamer.getMediaPlayer().isPlaying()) {
-//					audioStreamer.getMediaPlayer().stop();
-//				}
-//				final SeekBar progressBar = (SeekBar) (v1.findViewById(viewid)
-//						.findViewById(R.id.progress_bar));
-//				progressBar.setVisibility(View.VISIBLE);
-//				final TextView playTime = (TextView) (v1.findViewById(viewid)
-//						.findViewById(R.id.playTime));
-//				audioStreamer = new StreamingMediaPlayer(aQuery.getContext(),
-//						progressBar, playTime);
-//				audioStreamer.startStreaming(path);
-//			}
-//
-//		} catch (Exception e) {
-//		}
-//		// //
-//		// final Dialog dl = new Dialog(aQuery.getContext());
-//		// final View view = inflater.inflate(R.layout.musicplay, null);
-//		// dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		// dl.setContentView(view);
-//		// Window dialogWindow = dl.getWindow();
-//		// WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//		// dialogWindow.setGravity(Gravity.CENTER);
-//		// lp.width = 400;
-//		// lp.height =300;
-//		// dialogWindow.setAttributes(lp);
-//		// dl.show();
-//		// final ImageButton iv = (ImageButton)
-//		// view.findViewById(R.id.btn_play);
-//		// ((TextView)view.findViewById(R.id.btn_playname)).setText(name);
-//		// mp = new MediaPlayer();
-//		// view.findViewById(R.id.btn_stop).setOnClickListener(new
-//		// OnClickListener() {
-//		// @Override
-//		// public void onClick(View v) {
-//		// // TODO Auto-generated method stub
-//		// mp.stop();
-//		// dl.dismiss();
-//		// }
-//		// });
-//		// view.findViewById(R.id.btn_play).setOnClickListener(new
-//		// OnClickListener() {
-//		// @Override
-//		// public void onClick(View v) {
-//		// if(isplay){
-//		// mp.pause();
-//		// iv.setImageResource(R.drawable.desktop_playbt_b);
-//		// isplay=false;
-//		// }
-//		// else if(!isplay){
-//		// mp.start();
-//		// iv.setImageResource(R.drawable.desktop_pausebt_b);
-//		// isplay =true;
-//		// }
-//		// }
-//		// });
-//		// dl.setOnKeyListener(new OnKeyListener() {
-//		// @Override
-//		// public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent
-//		// event) {
-//		// // TODO Auto-generated method stub
-//		// if(keyCode==KeyEvent.KEYCODE_BACK){
-//		// if(isplay){
-//		// if(mp!=null){
-//		// mp.stop();
-//		// }
-//		// }
-//		// return false;
-//		// }
-//		// return false;
-//		// }
-//		// });
-//		//
-//		// if (musicTryTask != null && musicTryTask.getStatus() ==
-//		// AsyncTask.Status.RUNNING) {
-//		// musicTryTask.cancel(true); // 如果Task还在运行，则先取消它
-//		// }else{
-//		// musicTryTask = new musicTryplayAsyncTask(iv);
-//		// }
-//		// musicTryTask.execute(path);
-//
-//	}
-
-	// setmvplay
-	public static void setMVPilot(final Movie music) {
-//	
-//		Intent it =  new Intent(aQuery.getContext(),PlayerActivity.class);
-//		
-//		it.putExtra("clientControll", false);
-//		it.putExtra("movie",music);
-//		// i.setClass(aQuery.getContext(), Simplayer.class);
-//		aQuery.getContext().startActivity(it);
-		Intent it;
-		if(Constant.useVitamio){
-			it =  new Intent(aQuery.getContext(),VitamioPlayer.class);
-		}else{
-			 it =  new Intent(aQuery.getContext(),PlayerActivity.class);
-		}
-		
-		it.putExtra("clientControll", false);
-		it.putExtra("movie",music);
-		// i.setClass(aQuery.getContext(), Simplayer.class);
-		aQuery.getContext().startActivity(it);
 	}
 
 	// setdown（music，mv）
@@ -1788,10 +1251,16 @@ public class MainActivity1 extends FragmentActivity implements
 								new OnClickListener() {
 									@Override
 									public void onClick(View v) {
-										setMusicDetial(v.getId(),
-												music_chapterList,
-												viewFormusicdetail, orderId,
-												isFilm);
+										Intent i =new Intent(aQuery.getContext(),MoviesDetailActivity.class);
+										i.putExtra("id", v.getId());
+										i.putExtra("orderId", orderId);
+										i.putExtra("list", music_chapterList);
+										i.putExtra("id", orderId);
+										i.putExtra("iswhat", isFilm);
+										i.putExtra("isWhatRight", isWhatRight);
+										i.putExtra("isWhatLeft", isWhatLeft);
+										aQuery.getContext().startActivity(i);
+										
 									}
 								});
 					}
@@ -1880,338 +1349,19 @@ public class MainActivity1 extends FragmentActivity implements
 						itemView.findViewById(horItems[i]).setOnClickListener(
 								new OnClickListener() {
 									public void onClick(View v) {
-										setMusicDetial(v.getId(), mvlist,
-												viewFormusicdetail, orderid,
-												isTv);
+										Intent i =new Intent(aQuery.getContext(),MoviesDetailActivity.class);
+										i.putExtra("id", v.getId());
+										i.putExtra("list", mvlist);
+										i.putExtra("iswhat", isTv);
+										i.putExtra("isWhatRight", isWhatRight);
+										i.putExtra("isWhatLeft", isWhatLeft);
+										aQuery.getContext().startActivity(i);
 									}
 								});
 					}
 				}
 			}
 		});
-	}
-	// loading dialog for recommedmusic
-	public static void setRecommedMusicInfo(String musicId, final View view,
-			Movie music,final int iswhat) {
-		
-		String web_url = null;
-		for (int i = 0; i < tvlistItem.length; i++) {
-			if(isWhatLeft==Constant.MUSICCHAPTER){
-			view.findViewById(tvlistItem[i]).setVisibility(View.GONE);
-			
-			}else{
-				view.findViewById(tvlistItem[i]).setVisibility(View.INVISIBLE);
-			}
-		}
-		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
-				"Loading。。", "please wait moment。。");
-		Dialog.show();
-		ProDiaglogDimiss(Dialog);
-		if(iswhat==isFilm){
-			web_url= HttpRequest.URL_QUERY_LIST_MOVIE + musicId;
-		}else if(iswhat==isTv){
-			web_url=HttpRequest.URL_QUERY_LIST_TV+musicId;
-		}
-		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {
-			@Override
-			public void callback(String url, String json, AjaxStatus status) {
-				if (json != null) {
-					final ArrayList<Movie> musicDetialList = new ArrayList<Movie>();
-					System.out.println("下载的数据" + "====" + json);
-					Dialog.dismiss();
-					try {
-						JSONArray ja = new JSONArray(json);
-						for (int i = 0; i < ja.length(); i++) {
-							Movie music = new Movie();
-							JSONObject jb = ja.getJSONObject(i);
-							String sid = jb.getString("sid");
-							String musicpath = jb.getString("filepath");
-							String title = jb.getString("title");
-							String seq = null;
-							if(!jb.isNull("seq")){
-							seq =jb.getString("seq");
-							}
-							music.setSeq(seq);
-							music.setDownload_path(musicpath);
-							music.setId(sid);
-							music.setName(title);
-							musicDetialList.add(music);
-						}
-						int temp = 0;//级数常量
-						for (int i = 0; i < musicDetialList.size(); i++) {
-							
-							final Movie music =musicDetialList.get(i);
-							if(isWhatLeft==Constant.MUSICCHAPTER){
-							TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-							tv.setWidth(LayoutParams.WRAP_CONTENT);
-							tv.setVisibility(View.VISIBLE);
-							tv.setText(music.getName());
-							}else{
-								String seq = music.getSeq();
-								if(seq.length()!=0){
-									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-									tv.setWidth(LayoutParams.WRAP_CONTENT);
-									view.findViewById(tvlistItem[i])
-											.setVisibility(View.VISIBLE);
-									tv.setText(seq);
-									temp =Integer.parseInt(seq);
-								}else{
-									TextView tv =(TextView)(view.findViewById(tvlistItem[i]));
-									tv.setWidth(LayoutParams.WRAP_CONTENT);
-									view.findViewById(tvlistItem[i])
-											.setVisibility(View.VISIBLE);
-									temp =temp+1;
-									tv.setText(temp+"");
-								}
-							}
-							view.findViewById(tvlistItem[i])
-									.setOnClickListener(
-											new OnClickListener() {
-												@Override
-												public void onClick(
-														View v) {
-														setMVPilot(music);
-												}
-											});
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					Dialog.dismiss();
-				} else {
-					Toast.makeText(aQuery.getContext(),
-							"Error:" + status.getCode(), Toast.LENGTH_LONG)
-							.show();
-				}
-			}
-		});
-		String musicssPath = null  ;
-		if(iswhat==isFilm){
-			musicssPath= HttpRequest.URL_QUERY_SINGLE_MOVIE + musicId;
-		}else if(iswhat==isTv){
-			musicssPath=HttpRequest.URL_QUERY_SINGLE_TV+musicId;
-		}
-		aQuery.ajax(musicssPath, String.class, new AjaxCallback<String>() {
-			@Override
-			public void callback(String url, String json, AjaxStatus status) {
-				if (json != null) {
-					final String image_path_boot;
-					try {
-						final ArrayList<String> pathList = new ArrayList<String>();
-						ArrayList<String> nameList = new ArrayList<String>();
-						final ArrayList<PostMent> postMentList = new ArrayList<PostMent>();
-						JSONObject jb = new JSONObject(json);
-						image_path_boot = jb.getString("PIC");
-						String name = jb.getString("PNAME");
-						String note = jb.getString("PNOTE");
-						String director = "";
-						String kind = "";
-						String rose = "";
-						String pubdate = "";
-						if (!jb.isNull("DIRECTOR")) {
-							director = jb.getString("DIRECTOR");
-						}
-						if (!jb.isNull("KIND")) {
-							kind = jb.getString("KIND");
-						}
-						if (!jb.isNull("ROSE")) {
-							rose = jb.getString("ROSE");
-						}
-						if (!jb.isNull("RELEASE")) {
-							pubdate = jb.getString("RELEASE");
-						}
-						JSONArray postOb = jb.getJSONArray("potype");
-						for (int i = 0; i < postOb.length(); i++) {
-
-							PostMent pm = new PostMent();
-							pm.setType(postOb.getJSONObject(i)
-									.getString("TYPE"));
-							pm.setId(postOb.getJSONObject(i).getString("PUBID"));
-							pm.setPrice(postOb.getJSONObject(i).getString(
-									"PRICE"));
-							postMentList.add(pm);
-						}
-						builder.show();
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.albumname)).setText(name);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.albuminfo)).setText(note);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.artist)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.director)
-								+ " : " + director);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.Issuedate)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.pubdate)
-								+ " ： " + pubdate);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.language)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.language)
-								+ " ： " + rose);
-						((TextView) viewFormusicdetail
-								.findViewById(R.id.company)).setText(aQuery
-								.getContext().getResources()
-								.getString(R.string.company)
-								+ " ： " + kind);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					Dialog.dismiss();
-				} else {
-					Dialog.dismiss();
-					Toast.makeText(aQuery.getContext(),
-							"Error:" + status.getCode(), Toast.LENGTH_LONG)
-							.show();
-				}
-			}
-		});
-	}
-
-	/**
-	 * subscription
-	 *  加入到购物车中
-	 * @param postMentList
-	 * @param id
-	 */
-	static void setOrder(final ArrayList<PostMent> postMentList, final String id) {
-		String[]  myRadio = new String[postMentList.size()];
-		for (int i = 0; i < postMentList.size(); i++) {
-			String type = postMentList.get(i).getType();
-			String price = postMentList.get(i).getPrice();
-			myRadio[i] = type + "/" + price;
-
-		}
-
-		final View view = inflater.inflate(R.layout.orderstype, null);
-		for (int i = 0; i < orderRadioItem.length; i++) {
-			view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
-		}
-		for (int i = 0; i < postMentList.size(); i++) {
-			view.findViewById(orderRadioItem[i]).setVisibility(View.INVISIBLE);
-			RadioButton btn_rb = (RadioButton) view
-					.findViewById(orderRadioItem[i]);
-			String typeE = postMentList.get(i).getType();
-			if(i==0){
-				
-				whatTrueOrder=typeE;
-			}
-			if (typeE.equals("day")) {
-				btn_rb.setText("day/" + postMentList.get(i).getPrice());
-				btn_rb.setVisibility(View.VISIBLE);
-			}
-			if (typeE.equals("month")) {
-				btn_rb.setText("month/" + postMentList.get(i).getPrice());
-				btn_rb.setVisibility(View.VISIBLE);
-			}
-			if (typeE.equals("quarter")) {
-				btn_rb.setText("quarter/" + postMentList.get(i).getPrice());
-				btn_rb.setVisibility(View.VISIBLE);
-			}
-			if (typeE.equals("year")) {
-				btn_rb.setText("year/" + postMentList.get(i).getPrice());
-				btn_rb.setVisibility(View.VISIBLE);
-			}
-		}
-	
-		final Dialog dl = new Dialog(aQuery.getContext());
-		dl.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dl.setContentView(view);
-		Window dialogWindow = dl.getWindow();
-		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = 600;
-		lp.height = 400;
-		dialogWindow.setAttributes(lp);
-		dl.show();
-		RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
-		group.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				int checkedRadioButtonId = group.getCheckedRadioButtonId();
-				// 根据ID获取RadioButton的实例
-				RadioButton RadioButtonrb = (RadioButton) view
-						.findViewById(checkedRadioButtonId);
-				String s = RadioButtonrb.getText().toString();
-				String whatOrder = s.substring(0, s.lastIndexOf("/"));
-				whatTrueOrder = whatOrder;
-				Toast.makeText(aQuery.getContext(), whatOrder, 1).show();
-
-			}
-		});
-		view.findViewById(R.id.btn_order_confrm).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						new AsyncTask<Void, Void, String>(){
-
-							@Override
-							protected void onPostExecute(String result) {
-								pd.dismiss();
-								if(result.equals("true")){
-									Toast.makeText(aQuery.getContext(), "加入购物车成功", 1).show();
-								}else{
-									
-									Toast.makeText(aQuery.getContext(), "加入购物车失败，请重试", 1).show();
-								}
-								
-								super.onPostExecute(result);
-								
-							}
-
-							@Override
-							protected void onPreExecute() {
-								pd =new ProgressDialog(aQuery.getContext());
-								pd.show();
-								super.onPreExecute();
-							}
-							@Override
-							protected String doInBackground(Void... params) {
-								String url = null;
-								if(isWhatLeft==Constant.MUSICCHAPTER){
-									url = HttpRequest.URL_QUERY_LIST_PAY_ALLMOVIE + id
-										+ HttpRequest.URL_ADD + whatTrueOrder;
-								}else if(isWhatLeft==Constant.MUSICMV){
-									url= HttpRequest.URL_QUERY_LIST_PAY_ALLTV + id
-											+ HttpRequest.URL_ADD + whatTrueOrder;
-								}
-								String result = null;
-								System.out.println("订购的地址为：===" + url);
-								try {
-									HttpGet request = new HttpGet(url);
-									// 绑定到请求 Entry
-									// 发送请求
-									HttpResponse response = new DefaultHttpClient()
-											.execute(request);
-									// 得到应答的字符串，这也是一个 JSON 格式保存的数据
-									result = EntityUtils.toString(response.getEntity());
-									dl.dismiss();
-								} catch (Exception e) {
-									dl.dismiss();
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-
-								}
-								return result;
-							}
-							
-						}.execute();
-						
-
-					}
-				});
-		view.findViewById(R.id.btn_order_cancle).setOnClickListener(
-				new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						dl.dismiss();
-					}
-				});
 	}
 
 	/**
@@ -2446,16 +1596,4 @@ public class MainActivity1 extends FragmentActivity implements
 			  }
 		  });
 	  }
-	  /**
-	   * 获得屏幕的宽高
-	   */
-	  private void setParams() {
-		  DisplayMetrics dm = new DisplayMetrics();
-		  getWindowManager().getDefaultDisplay().getMetrics(dm);
-		  Rect rect = new Rect();
-		  View view = getWindow().getDecorView();
-		  view.getWindowVisibleDisplayFrame(rect);
-		  DeviceHeight = dm.heightPixels - rect.top;
-		  DeviceWidth = dm.widthPixels;
-		 }
 }

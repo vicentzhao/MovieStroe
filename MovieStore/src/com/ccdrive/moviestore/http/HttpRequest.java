@@ -86,7 +86,7 @@ public class HttpRequest {
 	public static String URL_QUERY_LIST_ORDER_SOFT = WEB_ROOT + "index/softshop!getworks.action?token=myadmin&resultType=json&id=";//软件订购列表
 	public static String URL_QUERY_SINGLE_ORDER_SOFT = WEB_ROOT + "index/softshop!singlebuy.action?token=myadmin&type=soft&id=";//订购单个软件商品
 	public static String URL_QUERY_LIST_ORDER_MUSIC = WEB_ROOT + "index/musicshop!getworks.action?token=myadmin&resultType=json&id=";//音乐订购列表
-	public static String URL_QUERY_SINGLE_ORDER_MUSIC = WEB_ROOT + "index/musicshop!singlebuy.action?token=myadmin&type=music&id=";//订购单个音乐商品
+	public static String URL_QUERY_SINGLE_ORDER_MUSIC = WEB_ROOT + "index/musicshop!singlebuy.action?token=myadmin&type=music&id=";//订购单个音乐商品,加入购物车
 	public static String URL_QUERY_LIST_ORDER_BOOK = WEB_ROOT + "index/bookshop!getworks.action?token=myadmin&resultType=json&id=";
 	public static String URL_QUERY_SINGLE_ORDER_BOOK = WEB_ROOT + "index/bookshop!singlebuy.action?token=myadmin&type=book&id=";
 	public static String URL_QUERY_LIST_ORDER_PAPER = WEB_ROOT + "index/papershop!getworks.action?token=myadmin&resultType=json&id=";

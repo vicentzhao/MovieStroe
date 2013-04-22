@@ -1,8 +1,9 @@
 package com.ccdrive.moviestore.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SoftwareBean {
+public class SoftwareBean implements Serializable {
 	private String name;
 	private String info;
 	private String version;

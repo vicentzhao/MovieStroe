@@ -12,5 +12,5 @@
         android:state_focused="true" 
         android:state_selected="true"
         />
-
+    <item android:drawable="@drawable/main_selector_modify_normal" android:state_focused="false"/>
 </selector>

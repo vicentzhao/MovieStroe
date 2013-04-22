@@ -83,6 +83,7 @@ private static int[] orderRadioItem = { R.id.rad1, R.id.rad2, R.id.rad3,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tv_detail);
+		inflater =LayoutInflater.from(getApplicationContext());
 		Intent t =getIntent();
 		int id =t.getIntExtra("id", 0);
 		int j = 0;

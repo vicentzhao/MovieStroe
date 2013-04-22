@@ -6,10 +6,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +20,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -36,14 +31,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -52,9 +45,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +57,6 @@ import com.ccdrive.moviestore.bean.Movie;
 import com.ccdrive.moviestore.bean.OrderBean;
 import com.ccdrive.moviestore.bean.PagenationBean;
 import com.ccdrive.moviestore.bean.PayOrderBean;
-import com.ccdrive.moviestore.bean.PostMent;
 import com.ccdrive.moviestore.bean.SoftwareBean;
 import com.ccdrive.moviestore.bean.VersionInfo;
 import com.ccdrive.moviestore.content.CommUtil;
@@ -75,11 +64,10 @@ import com.ccdrive.moviestore.content.Constant;
 import com.ccdrive.moviestore.http.HttpRequest;
 import com.ccdrive.moviestore.http.HttpRequest.OnHttpResponseListener;
 import com.ccdrive.moviestore.http.ImageDownloader;
+import com.ccdrive.moviestore.page.AppDetailActivity;
 import com.ccdrive.moviestore.page.MoviesDetailActivity;
 import com.ccdrive.moviestore.page.OrderPage;
-import com.ccdrive.moviestore.play.PlayerActivity;
 import com.ccdrive.moviestore.play.StreamingMediaPlayer;
-import com.ccdrive.moviestore.play.VitamioPlayer;
 import com.ccdrive.moviestore.util.AppUtil;
 import com.ccdrive.moviestore.util.JsonUtil;
 import com.ccdrive.moviestore.util.UpdateVersion;
@@ -739,225 +727,6 @@ public class MainActivity1 extends FragmentActivity implements
 		}
 	}
 
-	// Set softrecommend 软件推荐
-	private static void setSoftrecommend(ArrayList<SoftwareBean> list,
-			final View view) {
-
-		ImageDownloader Downloader = new ImageDownloader(aQuery.getContext());
-		for (int i = 0; i < 5; i++) {
-			view.findViewById(horItems[i]).setVisibility(View.VISIBLE);
-		}
-		int j = 0;
-		if (list.size() < 5) {
-			for (int s = 0; s < 5 - list.size(); s++) {
-				view.findViewById(horItems[4 - s]).setVisibility(View.GONE);
-			}
-		}
-		for (int i = 0; i < ((list.size() <= 5) ? list.size() : 5); i++) {
-			final String image_path_boots = list.get(i).getImage_path();
-			final int h = horItems[i];
-			SoftwareBean sb = list.get(i);
-			final String name = list.get(i).getName();
-			final String path_root = list.get(i).getDownload_path();
-			final String author = list.get(i).getAuthor();
-			final String release = list.get(i).getRelease();
-			final String addDate =list.get(i).getAddDate();
-			final String version =list.get(i).getVersion();
-			final String evenment=list.get(i).getEnvironment();
-			String image_path = sb.getImage_path();
-			final String title = sb.getName();
-			String turePath = HttpRequest.URL_QUERY_SINGLE_IMAGE + image_path;
-			Downloader.download(
-					turePath,
-					((ImageView) view.findViewById(horItems[i]).findViewById(
-							R.id.ItemIcon)));
-			((TextView) view.findViewById(horItems[i]).findViewById(
-					R.id.ItemTitle)).setText(title);
-			view.findViewById(horItems[i]).setOnClickListener(
-					new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							appDownPath = HttpRequest.URL_QUERY_DOWNLOAD_URL
-									+ path_root;
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.appname)).setText(name);
-							String path = HttpRequest.URL_QUERY_SINGLE_IMAGE
-									+ image_path_boots;
-							ImageView imageView = (ImageView) viewForsoftDetail
-									.findViewById(R.id.appimage);
-							ImageDownloader downloader = new ImageDownloader(
-									aQuery.getContext());
-							downloader.download(path, imageView);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.appname)).setText(name);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.title_text)).setText(name);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.appcompany)).setText(aQuery.getContext().getResources().getString(R.string.soft_company)+author);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.Issuedate)).setText(aQuery.getContext().getResources().getString(R.string.soft_addDate)+addDate);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.versions)).setText(aQuery.getContext().getResources().getString(R.string.soft_version)+version);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.publishdate)).setText(aQuery.getContext().getResources().getString(R.string.soft_reledate)+release);
-							((TextView) viewForsoftDetail
-									.findViewById(R.id.platform)).setText(aQuery.getContext().getResources().getString(R.string.soft_evenment)+evenment);
-						}
-					});
-		}
-	}
-
-	/**
-	 * setSoftDetial param 软件详细界面
-	 */
-	public static void setSoftDetail(int id, final ArrayList<SoftwareBean> list) {
-		final Handler hdHandler = new Handler();
-		int j = 0;
-
-		for (int i = 0; i < horItems.length; i++) {
-			if (id == horItems[i]) {
-				j = i;
-			}
-		}
-		final String appId = list.get(j).getId();
-		String appPath = HttpRequest.URL_QUERY_SINGLE_SOFT + appId;
-		final ProgressDialog Dialog = ProgressDialog.show(aQuery.getContext(),
-				"缓冲中。。", "正在缓冲请稍后。。");
-	    ProDiaglogDimiss(Dialog);
-		builder.setContentView(viewForsoftDetail);
-		Window dialogWindow = builder.getWindow();
-		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-		dialogWindow.setGravity(Gravity.CENTER);
-		lp.width = 1000;
-		lp.height = 640;
-		dialogWindow.setAttributes(lp);
-		Dialog.show();
-		String web_url = HttpRequest.URL_QUERY_LIST_SOFT + appId;
-		aQuery.ajax(web_url, String.class, new AjaxCallback<String>() {// 这里的函数是一个内嵌函数如果是函数体比较复杂的话这种方法就不太合适了
-					@Override
-					public void callback(String url, String json,
-							AjaxStatus status) {
-						// 得通过对一个url访问返回的数据存放在JSONObject json中
-						// 可以通过json.getContext()得到
-						if (json != null) {
-							Dialog.dismiss();
-							try {
-								JSONArray ja = new JSONArray(json);
-								for (int i = 0; i < ja.length(); i++) {
-									JSONObject jb = ja.getJSONObject(i);
-									final String appDownPaths = jb
-											.getString("filepath");
-									String version = jb.getString("title");
-									appDownPath = HttpRequest.URL_QUERY_DOWNLOAD_URL
-											+ appDownPaths + "&" + "多米";
-									viewForsoftDetail
-											.findViewById(R.id.install)
-											.setOnClickListener(
-													new OnClickListener() {
-														@Override
-														public void onClick(
-																View v) {
-															// TODO
-															// Auto-generated
-															// method stub
-															System.out
-																	.println("我已经被监听了");
-															String web_url = HttpRequest.URL_QUERY_LIST_SOFT
-																	+ appId;
-															new AsyncTask<Void, Void, Void>() {
-																@Override
-																protected Void doInBackground(
-																		Void... params) {
-																	UpdateVersion updateVersion = UpdateVersion
-																			.instance(
-																					aQuery.getContext(),
-																					hdHandler,
-																					true);
-																	updateVersion
-																			.setUpdateUrl(appDownPath);
-																	updateVersion
-																			.run();
-																	return null;
-																}
-															}.execute();
-														}
-													});
-								}
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							// successful ajax call, show status code and json
-							// content
-						} else {
-							Dialog.dismiss();
-							Toast.makeText(aQuery.getContext(),
-									"Error:" + status.getCode(),
-									Toast.LENGTH_LONG).show();
-						}
-					}
-				});
-		aQuery.ajax(appPath, String.class, new AjaxCallback<String>() {
-			@Override
-			public void callback(String url, String json, AjaxStatus status) {
-				// 得通过对一个url访问返回的数据存放在JSONObject json中 可以通过json.getContext()得到
-				if (json != null) {
-					System.out.println("下载的数据" + "====" + json);
-					final String image_path_boot;
-					try {
-						SoftwareBean softBean = JsonUtil.getSoftBean(json);
-						AppUtil appUtil = new AppUtil(aQuery.getContext());
-						 boolean install = appUtil.isInstall(softBean.getName());
-						 if(install){
-							 viewForsoftDetail
-								.findViewById(R.id.uninstall).setVisibility(View.VISIBLE);
-							 viewForsoftDetail
-							 .findViewById(R.id.uninstall).setFocusable(false);
-							 viewForsoftDetail
-								.findViewById(R.id.install).setVisibility(View.GONE);
-						 }else{
-							 viewForsoftDetail
-								.findViewById(R.id.uninstall).setVisibility(View.GONE);
-							 viewForsoftDetail
-								.findViewById(R.id.install).setVisibility(View.VISIBLE);
-						 }
-						builder.show();
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.appname)).setText(softBean.getName());
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.title_text)).setText(softBean.getName());
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.appcompany)).setText(aQuery.getContext().getResources().getString(R.string.soft_company)+softBean.getAuthor());
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.Issuedate)).setText(aQuery.getContext().getResources().getString(R.string.soft_addDate)+softBean.getRelease());
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.versions)).setText(aQuery.getContext().getResources().getString(R.string.soft_version)+softBean.getVersion());
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.publishdate)).setText(aQuery.getContext().getResources().getString(R.string.soft_reledate)+softBean.getRelease());
-						((TextView) viewForsoftDetail
-								.findViewById(R.id.platform)).setText(aQuery.getContext().getResources().getString(R.string.soft_evenment)+softBean.getEnvironment());
-						setSoftrecommend(list, viewForsoftDetail);
-						String path = HttpRequest.URL_QUERY_SINGLE_IMAGE
-								+ softBean.getImage_path();
-						ImageView imageView = (ImageView) viewForsoftDetail
-								.findViewById(R.id.appimage);
-						ImageDownloader downloader = new ImageDownloader(aQuery
-								.getContext());
-						downloader.download(path, imageView);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					Dialog.dismiss();
-				} else {
-					Dialog.dismiss();
-					Toast.makeText(aQuery.getContext(),
-							"Error:" + status.getCode(), Toast.LENGTH_LONG)
-							.show();
-				}
-			}
-		});
-	}
-
 	static boolean isExit = false;
 	static Handler mHandler = new Handler() {
 		@Override
@@ -1079,9 +848,10 @@ public class MainActivity1 extends FragmentActivity implements
 					new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							System.out.println("item被点击了");
-							setSoftDetail(v.getId(), musicAppList);
-							int id = v.getId();
+							Intent t = new Intent(aQuery.getContext(),AppDetailActivity.class);
+							 t.putExtra("itemid", v.getId());
+							 t.putExtra("appList", musicAppList);
+							  aQuery.getContext().startActivity(t);
 						}
 					});
 		}
@@ -1255,7 +1025,6 @@ public class MainActivity1 extends FragmentActivity implements
 										i.putExtra("id", v.getId());
 										i.putExtra("orderId", orderId);
 										i.putExtra("list", music_chapterList);
-										i.putExtra("id", orderId);
 										i.putExtra("iswhat", isFilm);
 										i.putExtra("isWhatRight", isWhatRight);
 										i.putExtra("isWhatLeft", isWhatLeft);
